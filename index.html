@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলা ডকুমেন্ট ও পিডিএফ মেকার</title>
+    <meta name="description" content="সহজে বাংলা ডকুমেন্ট তৈরি করুন এবং পিডিএফ ডাউনলোড করুন।">
+    
+  
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+    
+  
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .ql-editor {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 16px;
+            min-height: 300px;
+        }
+        
+        #print-area {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        
+        
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+            @page { margin: 0; }
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    
+    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col hidden md:flex">
+        <div class="p-5 border-b border-gray-200">
+            <h1 class="text-xl font-bold text-blue-700">ডকুমেন্ট মেকার</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            
+            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg bg-blue-50 text-blue-700 font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                নতুন ডকুমেন্ট
+            </button>
+            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg hover:bg-gray-50 text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                আবেদনপত্র
+            </button>
+            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg hover:bg-gray-50 text-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                চুক্তিপত্র
+            </button>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      
+        <header class="bg-white border-b border-gray-200 p-4 flex justify-between items-center z-10 shadow-sm">
+            <h2 class="text-lg font-semibold text-gray-800">এডিটর</h2>
+            <div class="flex items-center gap-3">
+                <select id="page-size" class="border border-gray-300 rounded p-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="a4">A4 সাইজ</option>
+                    <option value="a5">A5 সাইজ</option>
+                </select>
+                <button onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold text-sm shadow transition">
+                    PDF ডাউনলোড
+                </button>
+            </div>
+        </header>
+
+      
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-gray-100">
+            
+        
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[500px] lg:h-auto">
+                <div id="editor-container" class="flex-1 overflow-y-auto"></div>
+            </div>
+
+        
+            <div class="overflow-auto flex justify-center items-start pb-10">
+                <div id="print-area" class="w-[210mm] min-h-[297mm] p-[20mm] text-justify leading-relaxed text-gray-800 text-base">
+                  
+                    <div id="preview-content" class="prose max-w-none">
+                        <p class="text-gray-400 text-center mt-20">এখানে আপনার ডকুমেন্টের প্রিভিউ দেখা যাবে...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- html2pdf.js (PDF তৈরির জন্য) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        // Quill এডিটর চালু করা
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: 'এখানে আপনার ডকুমেন্ট লিখুন...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+
+        quill.on('text-change', function() {
+            const html = quill.root.innerHTML;
+            document.getElementById('preview-content').innerHTML = html;
+        });
+
+        
+        function downloadPDF() {
+            const element = document.getElementById('print-area');
+            const pageSize = document.getElementById('page-size').value;
+
+            const opt = {
+                margin:       0,
+                filename:     'bangla-document.pdf',
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 3, useCORS: true }, // Scale 3 দিলে কোয়ালিটি খুব ভালো হয়
+                jsPDF:        { unit: 'mm', format: pageSize, orientation: 'portrait' }
+            };
+
+            
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+  </html>
