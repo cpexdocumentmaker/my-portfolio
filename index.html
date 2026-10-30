@@ -3,304 +3,338 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>বাংলা ডকুমেন্ট ও পিডিএফ মেকার</title>
-<meta name="description" content="সহজে বাংলা ডকুমেন্ট তৈরি করুন এবং পিডিএফ ডাউনলোড করুন।">
+<title>ডক স্টুডিও — ডকুমেন্ট ও PDF টুলস</title>
+<meta name="description" content="ইনভয়েস, কোটেশন, রিসিপ্ট, পে-স্লিপ, চিঠি, সার্টিফিকেট, সিভি ও আরও অনেক ডকুমেন্ট বানান এবং PDF করুন।">
 <meta name="theme-color" content="#0f6b5c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📄%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1f2430;--muted:#667085;--line:#d9dee5;--desk:#e8ebef;--paper:#fff;--accent:#0f6b5c;--accent-d:#0a5448;--accent-l:#e3f1ee;--pw:210mm;--ph:297mm;--m:20mm;--doc-font:'Noto Serif Bengali',serif;--doc-size:16px}
+:root{--acc:#0f6b5c;--bg:#f3f5f8;--card:#fff;--ink:#1f2430;--mut:#667085;--line:#e2e6ec;--side:#fff;--hov:#f1f4f7;--tint:color-mix(in srgb,var(--acc) 12%,transparent);--accd:color-mix(in srgb,var(--acc) 82%,#000)}
+[data-dark]{--bg:#12161c;--card:#1b2129;--ink:#e8ecf1;--mut:#97a1ae;--line:#2a323d;--side:#171c23;--hov:#222a34}
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{font-family:'Noto Sans Bengali',system-ui,sans-serif;color:var(--ink);background:var(--desk);display:flex;flex-direction:column}
-button,select,input{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.top{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.brand{font-weight:700;color:var(--accent);font-size:18px;margin-right:4px;white-space:nowrap}
-#doc-title{flex:1;min-width:140px;border:1px solid transparent;border-radius:8px;padding:7px 10px;font-weight:600;background:transparent}
-#doc-title:hover,#doc-title:focus{border-color:var(--line);background:#fff}
-.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-select,.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer}
-.btn:hover,select:hover{border-color:#aeb7c2}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-.btn.primary:hover{background:var(--accent-d)}
+html,body{margin:0;height:100%}
+body{font-family:'Noto Sans Bengali',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{display:flex;height:100%}
+#side{width:250px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;transition:transform .2s;z-index:30}
+.brand{display:flex;align-items:center;gap:10px;padding:16px 18px;font-weight:700;font-size:17px}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:17px}
+#nav{flex:1;overflow:auto;padding:0 10px 14px}
+.gt{font-size:11.5px;color:var(--mut);font-weight:600;margin:14px 10px 5px;letter-spacing:.3px}
+.ni{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;padding:9px 10px;border-radius:9px;cursor:pointer;text-align:left;color:var(--ink)}
+.ni:hover{background:var(--hov)}
+.ni.on{background:var(--tint);color:var(--acc);font-weight:600}
+svg.i{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--side);border-bottom:1px solid var(--line)}
+.ib{border:1px solid var(--line);background:var(--card);border-radius:9px;width:38px;height:38px;display:grid;place-items:center;cursor:pointer}
+.ib:hover{background:var(--hov)}
+#burger{display:none}
+.sr{flex:1;max-width:420px;position:relative}
+.sr svg{position:absolute;left:11px;top:10px;color:var(--mut)}
+.sr input{width:100%;border:1px solid var(--line);background:var(--card);border-radius:9px;padding:9px 12px 9px 38px}
+#view{flex:1;overflow:auto;padding:22px;min-height:0}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.st b{font-size:26px;display:block}.st span{color:var(--mut);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.tc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:left;cursor:pointer;display:block;width:100%}
+.tc:hover{border-color:var(--acc);transform:translateY(-2px)}
+.tc .ci{width:40px;height:40px;border-radius:10px;background:var(--tint);color:var(--acc);display:grid;place-items:center;margin-bottom:10px}
+.tc b{display:block}.tc small{color:var(--mut)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+h2{font-size:16px;margin:0 0 10px}
+table.l{width:100%;border-collapse:collapse}
+table.l td,table.l th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 14px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;font-size:14px}
+.btn:hover{background:var(--hov)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.btn.p:hover{background:var(--accd)}
 .btn:disabled{opacity:.6;cursor:wait}
-.body{flex:1;display:flex;min-height:0}
-.side{width:210px;background:var(--paper);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
-.side h2{font-size:13px;color:var(--muted);font-weight:600;margin:4px 6px 6px}
-.tpl{text-align:left;border:0;background:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:15px}
-.tpl:hover{background:#f3f5f7}
-.tpl.on{background:var(--accent-l);color:var(--accent-d);font-weight:600}
-.work{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:16px;min-width:0;min-height:0}
-.pane{min-width:0;min-height:0;display:flex;flex-direction:column}
-.editor-card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
-#editor-container{flex:1;overflow-y:auto;border:0!important;font-family:var(--doc-font)}
-.ql-toolbar.ql-snow{border:0!important;border-bottom:1px solid var(--line)!important;background:#fafbfc}
-.ql-editor{font-family:var(--doc-font);font-size:16px;line-height:1.8;min-height:240px}
-.ql-editor.ql-blank::before{font-style:normal;color:#9aa3af}
-.stage{flex:1;overflow:auto;min-height:0;padding-bottom:24px}
-.pagewrap{margin:0 auto;position:relative}
-#print-area{background:var(--paper);box-shadow:0 2px 12px rgba(20,30,50,.15);width:var(--pw);min-height:var(--ph);padding:var(--m);transform-origin:top left;position:absolute;left:0;top:0}
-.doc{font-family:var(--doc-font);font-size:var(--doc-size);line-height:1.85;color:#111;text-align:justify;overflow-wrap:anywhere}
-.doc p,.doc ul,.doc ol,.doc h1,.doc h2,.doc h3{margin:0 0 .7em}
-.doc h1{font-size:1.7em;line-height:1.4;text-align:center}
-.doc h2{font-size:1.4em;line-height:1.4}
-.doc h3{font-size:1.2em;line-height:1.4}
-.doc ul,.doc ol{padding-left:1.7em}
-.doc ul{list-style:disc}.doc ol{list-style:decimal}
-.doc li{margin:0 0 .25em}
-.doc .ql-align-center{text-align:center}.doc .ql-align-right{text-align:right}.doc .ql-align-justify{text-align:justify}
-.doc .ql-indent-1{padding-left:3em}.doc .ql-indent-2{padding-left:6em}.doc .ql-indent-3{padding-left:9em}
-.doc p,.doc li,.doc h1,.doc h2,.doc h3{break-inside:avoid}
-.empty{color:#9aa3af;text-align:center;margin-top:30mm}
-.status{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:8px 4px 0}
+.tw{display:grid;grid-template-columns:minmax(340px,430px) 1fr;gap:18px;height:100%}
+.fp{overflow:auto;min-height:0}
+.pv{overflow:auto;min-height:0}
+.tb{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.f{margin-bottom:10px}
+.f label{display:block;font-size:12.5px;color:var(--mut);margin-bottom:3px}
+.f input,.f select,.f textarea,.it input{width:100%;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 10px}
+.f textarea{min-height:76px;resize:vertical}
+.sc{overflow-x:auto}
+.it{width:100%;border-collapse:collapse;margin-bottom:8px}
+.it td{padding:2px}.it th{font-size:12px;color:var(--mut);text-align:left;padding:3px}
+.x{border:0;background:none;color:#d92d20;cursor:pointer;font-size:18px}
+#wrap{margin:0 auto;position:relative}
+.paper{width:794px;min-height:1123px;background:#fff;color:#111;padding:46px 52px;font-size:13.5px;line-height:1.6;box-shadow:0 2px 14px rgba(20,30,50,.18);position:absolute;left:0;top:0;transform-origin:top left}
+.pdf .paper{position:static;box-shadow:none}
+.dh{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid var(--acc);padding-bottom:12px;margin-bottom:18px}
+.cn{font-size:20px;font-weight:700;color:var(--acc)}.ca{color:#555;font-size:12px}
+.dt{font-size:24px;font-weight:700;letter-spacing:1px;color:#222;text-align:right}
+.mt td{padding:1px 8px 1px 0}.pt{margin:14px 0}.pt small{display:block;color:#777}
+.dtb{width:100%;border-collapse:collapse;margin:14px 0}
+.dtb th{background:var(--acc);color:#fff;padding:7px;text-align:left;font-size:12.5px}
+.dtb td{padding:7px;border-bottom:1px solid #ddd}
+.dtb .r{text-align:right}
+.tt{margin-left:auto;min-width:270px;border-collapse:collapse}.tt td{padding:4px 8px;text-align:right}.tt td:first-child{text-align:left}
+.tt .g td{font-weight:700;font-size:15px;border-top:2px solid #222}
+.sg{display:flex;justify-content:space-between;margin-top:70px}.sg div{border-top:1px solid #222;padding-top:5px;min-width:170px;text-align:center}
+.ctr{text-align:center}
+.cert{border:8px double var(--acc);padding:50px 30px;text-align:center;min-height:900px}
+.cert h1{font-size:40px;color:var(--acc);letter-spacing:3px}.cert .nm{font-size:34px;font-weight:700;margin:18px 0;border-bottom:1px solid #999;display:inline-block;padding:0 30px}
+.sec{font-weight:700;color:var(--acc);border-bottom:1px solid #ddd;margin:16px 0 6px;text-transform:uppercase;font-size:13px}
+.sw{display:flex;gap:8px;flex-wrap:wrap}.sw button{width:30px;height:30px;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.fr{width:100%;height:100%;border:0;border-radius:12px;background:#fff}
+#scrim{display:none}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1f2430;color:#fff;padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+#toast.show{opacity:1}
 .tabs{display:none}
-#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#1f2430;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}
-#toast.show{opacity:1;transform:translate(-50%,0)}
-@media (max-width:900px){
- .side{display:none}
- .work{grid-template-columns:1fr;padding:10px}
- .tabs{display:flex;background:var(--paper);border-bottom:1px solid var(--line)}
- .tabs button{flex:1;border:0;background:none;padding:11px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer}
- .tabs button.on{color:var(--accent);border-color:var(--accent)}
- .work[data-view=edit] .pane.view{display:none}
- .work[data-view=view] .pane.edit{display:none}
- .brand{width:100%}
+@media(max-width:900px){
+ #side{position:fixed;inset:0 auto 0 0;transform:translateX(-100%)}
+ #side.open{transform:none}
+ #scrim.on{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20}
+ #burger{display:grid}
+ #view{padding:14px}
+ .tw{grid-template-columns:1fr;height:auto}
+ .tw[data-v=f] .pv,.tw[data-v=p] .fp{display:none}
+ .tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1}
 }
-@media (prefers-reduced-motion:reduce){#toast{transition:none}}
 @media print{
- @page{margin:0}
- body{display:block;background:#fff;height:auto}
- .top,.side,.tabs,.pane.edit,.status,#toast{display:none!important}
- .work,.pane,.stage,.pagewrap{display:block!important;padding:0!important;overflow:visible!important;height:auto!important;width:auto!important}
- #print-area{position:static!important;transform:none!important;box-shadow:none;width:100%;min-height:0}
+ @page{size:A4;margin:0}
+ body{background:#fff}.app,.main{display:block;height:auto}
+ #side,.bar,.fp,.tb,.tabs,#toast{display:none!important}
+ #view{padding:0;overflow:visible}.tw{display:block}.pv{overflow:visible}
+ #wrap{width:auto!important;height:auto!important}.paper{position:static;transform:none!important;box-shadow:none}
 }
 </style>
 </head>
 <body>
-
-<header class="top">
- <div class="brand">ডকুমেন্ট মেকার</div>
- <input id="doc-title" type="text" value="নামহীন ডকুমেন্ট" aria-label="ডকুমেন্টের নাম" maxlength="60">
- <div class="tools">
-  <select id="doc-font" aria-label="ফন্ট">
-   <option value="serif">সেরিফ ফন্ট</option>
-   <option value="sans">সান্স ফন্ট</option>
-  </select>
-  <select id="page-size" aria-label="পেজ সাইজ">
-   <option value="a4">A4 সাইজ</option>
-   <option value="a5">A5 সাইজ</option>
-  </select>
-  <a class="btn" href="claim.html" style="text-decoration:none">ক্লেইম মেকার</a>
-  <button class="btn" id="btn-print" type="button">প্রিন্ট</button>
-  <button class="btn primary" id="btn-pdf" type="button">PDF ডাউনলোড</button>
+<div class="app">
+ <aside id="side"><div class="brand"><span class="logo" id="logo"></span><span id="bname"></span></div><nav id="nav"></nav></aside>
+ <div class="main">
+  <header class="bar">
+   <button class="ib" id="burger" aria-label="মেনু"></button>
+   <div class="sr"><span id="si"></span><input id="q" type="search" placeholder="টুল খুঁজুন..." aria-label="টুল খুঁজুন"></div>
+   <span style="flex:1"></span>
+   <button class="ib" id="theme" aria-label="ডার্ক মোড"></button>
+   <button class="ib" id="gear" aria-label="সেটিং"></button>
+  </header>
+  <main id="view"></main>
  </div>
-</header>
-
-<nav class="tabs" id="tabs" aria-label="ভিউ">
- <button type="button" data-v="edit" class="on">এডিটর</button>
- <button type="button" data-v="view">প্রিভিউ</button>
-</nav>
-
-<div class="body">
- <aside class="side" aria-label="টেমপ্লেট">
-  <h2>টেমপ্লেট</h2>
-  <button class="tpl on" type="button" data-t="blank">নতুন ডকুমেন্ট</button>
-  <button class="tpl" type="button" data-t="application">আবেদনপত্র</button>
-  <button class="tpl" type="button" data-t="contract">চুক্তিপত্র</button>
-  <h2 style="margin-top:14px">অন্যান্য টুল</h2>
-  <a class="tpl" href="claim.html" style="text-decoration:none;color:inherit">ক্লেইম মেকার</a>
- </aside>
-
- <main class="work" id="work" data-view="edit">
-  <section class="pane edit">
-   <div class="editor-card"><div id="editor-container"></div></div>
-   <div class="status"><span id="count">০ শব্দ</span><span id="saved">স্বয়ংক্রিয় সংরক্ষণ চালু</span></div>
-  </section>
-  <section class="pane view">
-   <div class="stage" id="stage">
-    <div class="pagewrap" id="pagewrap">
-     <div id="print-area"><div id="preview-content" class="doc"></div></div>
-    </div>
-   </div>
-  </section>
- </main>
 </div>
-<div id="toast" role="status" aria-live="polite"></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<div id="scrim"></div><div id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 (function(){
 'use strict';
-var $=function(id){return document.getElementById(id)};
-var KEY='bdm_doc_v1', MM=96/25.4;
-var SIZES={a4:{w:210,h:297,m:20,fs:16,name:'A4'},a5:{w:148,h:210,m:14,fs:14,name:'A5'}};
-var FONTS={serif:"'Noto Serif Bengali',serif",sans:"'Noto Sans Bengali',sans-serif"};
+var $=function(i){return document.getElementById(i)};
+var num=function(v){var n=parseFloat(v);return isFinite(n)?n:0};
+var f2=function(n){return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var br=function(s){return esc(s).replace(/\n/g,'<br>')};
+var today=new Date().toISOString().slice(0,10);
 
-if(typeof Quill==='undefined'){
- document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">এডিটর লোড হয়নি। ইন্টারনেট সংযোগ দেখে পেজটি রিলোড করুন।</p>';
- return;
-}
+/* ---------- আইকন ---------- */
+var IC={home:'M3 11l9-8 9 8v10H4z',grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',receipt:'M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2zM9 8h6M9 12h6',quote:'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5',truck:'M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19h.01M17 19h.01',wallet:'M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2zM3 7l2-3h12M16 13h2',mail:'M3 6h18v12H3zM3 7l9 6 9-6',award:'M12 14a5 5 0 100-10 5 5 0 000 10zM8.5 13.5L7 21l5-3 5 3-1.5-7.5',user:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0',pen:'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',doc:'M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M9 13h6M9 17h6',build:'M4 21V5a1 1 0 011-1h8a1 1 0 011 1v16M14 9h5a1 1 0 011 1v11M3 21h18M8 8h2M8 12h2M8 16h2',image:'M4 5h16v14H4zM8 10h.01M4 17l5-5 4 4 3-3 4 4',set:'M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M10 10v4M16 16v4',menu:'M4 6h16M4 12h16M4 18h16',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',moon:'M20 14A8 8 0 1110 4a6.5 6.5 0 0010 10z',dl:'M12 4v11M7 11l5 5 5-5M5 20h14',trash:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',plus:'M12 5v14M5 12h14',save:'M5 3h12l3 3v15H5zM8 3v6h8M8 21v-7h8v7',print:'M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z',reset:'M4 12a8 8 0 108-8M4 4v5h5',open:'M5 12h14M13 6l6 6-6 6'};
+var ico=function(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="'+(IC[n]||IC.doc)+'"/></svg>'};
 
-var quill=new Quill('#editor-container',{
- theme:'snow',
- placeholder:'এখানে আপনার ডকুমেন্ট লিখুন...',
- modules:{toolbar:[[{header:[1,2,3,false]}],['bold','italic','underline'],[{list:'ordered'},{list:'bullet'}],[{align:[]}],[{indent:'-1'},{indent:'+1'}],['clean']]}
-});
+/* ---------- ডেটা ---------- */
+var DEF={name:'ডক স্টুডিও',co:'আপনার কোম্পানির নাম',addr:'',phone:'',email:'',cur:'RM',acc:'#0f6b5c',dark:0};
+var D={set:Object.assign({},DEF),docs:[],drafts:{}};
+try{var sv=JSON.parse(localStorage.getItem('dash_v1')||'null');if(sv){D=sv;D.set=Object.assign({},DEF,sv.set);D.docs=D.docs||[];D.drafts=D.drafts||{}}}catch(e){}
+function save(){try{localStorage.setItem('dash_v1',JSON.stringify(D))}catch(e){}}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2600)}
+var money=function(n){return esc(D.set.cur)+' '+f2(n)};
 
-var state={size:'a4',font:'serif',title:'নামহীন ডকুমেন্ট'};
-var timer=null;
-
-function toast(msg){
- var t=$('toast');t.textContent=msg;t.classList.add('show');
- clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2600);
-}
-function isEmpty(){return quill.getText().trim().length===0}
-function bn(n){return String(n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})}
-
-function applySize(){
- var s=SIZES[state.size],r=document.documentElement.style;
- r.setProperty('--pw',s.w+'mm');r.setProperty('--ph',s.h+'mm');
- r.setProperty('--m',s.m+'mm');r.setProperty('--doc-size',s.fs+'px');
- r.setProperty('--sz',s.name);
- r.setProperty('--doc-font',FONTS[state.font]);
- fit();
-}
-
-function fit(){
- var s=SIZES[state.size],pa=$('print-area'),wrap=$('pagewrap'),stage=$('stage');
- var avail=stage.clientWidth-8,full=s.w*MM,k=Math.min(1,avail/full);
- if(!isFinite(k)||k<=0)k=1;
- pa.style.transform='scale('+k+')';
- wrap.style.width=(full*k)+'px';
- wrap.style.height=(pa.offsetHeight*k)+'px';
-}
-
-function render(){
- var html=quill.root.innerHTML;
- $('preview-content').innerHTML=isEmpty()?'<p class="empty">এখানে আপনার ডকুমেন্টের প্রিভিউ দেখা যাবে...</p>':html;
- var words=quill.getText().trim().split(/\s+/).filter(Boolean).length;
- $('count').textContent=bn(isEmpty()?0:words)+' শব্দ';
- fit();
-}
-
-function save(){
- try{
-  localStorage.setItem(KEY,JSON.stringify({html:quill.root.innerHTML,size:state.size,font:state.font,title:state.title}));
-  $('saved').textContent='সংরক্ষিত হয়েছে';
- }catch(e){$('saved').textContent='সংরক্ষণ সম্ভব হয়নি'}
-}
-function queueSave(){
- $('saved').textContent='সংরক্ষণ হচ্ছে...';
- clearTimeout(timer);timer=setTimeout(save,600);
-}
-
-quill.on('text-change',function(){render();queueSave()});
-
-/* টাইটেল, সাইজ, ফন্ট */
-$('doc-title').addEventListener('input',function(e){state.title=e.target.value;queueSave()});
-$('page-size').addEventListener('change',function(e){state.size=e.target.value;applySize();queueSave()});
-$('doc-font').addEventListener('change',function(e){state.font=e.target.value;applySize();queueSave()});
-window.addEventListener('resize',fit);
-
-/* মোবাইল ট্যাব */
-$('tabs').addEventListener('click',function(e){
- var b=e.target.closest('button');if(!b)return;
- Array.prototype.forEach.call(this.children,function(c){c.classList.toggle('on',c===b)});
- $('work').dataset.view=b.dataset.v;
- setTimeout(fit,0);
-});
-
-/* টেমপ্লেট */
-var today=new Date().toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'});
-var TPL={
- blank:{title:'নামহীন ডকুমেন্ট',html:''},
- application:{title:'আবেদনপত্র',html:
-  '<p>তারিখ: '+today+'</p><p>বরাবর,<br>[প্রাপকের পদবি]<br>[প্রতিষ্ঠানের নাম]<br>[ঠিকানা]</p>'+
-  '<p><strong>বিষয়: [আবেদনের বিষয়]।</strong></p><p>জনাব/মহোদয়,</p>'+
-  '<p>বিনীত নিবেদন এই যে, [আপনার পরিচয় ও আবেদনের কারণ বিস্তারিত লিখুন]। এমতাবস্থায়, আপনার নিকট বিনীত অনুরোধ, [আপনার চাওয়া] মঞ্জুর করে আমাকে বাধিত করবেন।</p>'+
-  '<p>বিনীত নিবেদক,<br>[আপনার নাম]<br>[পদবি/পরিচয়]<br>মোবাইল: [নম্বর]</p>'},
- contract:{title:'চুক্তিপত্র',html:
-  '<h1>চুক্তিপত্র</h1><p>এই চুক্তিপত্র '+today+' তারিখে সম্পাদিত হলো।</p>'+
-  '<p><strong>প্রথম পক্ষ:</strong> [নাম], পিতা: [পিতার নাম], ঠিকানা: [ঠিকানা]।</p>'+
-  '<p><strong>দ্বিতীয় পক্ষ:</strong> [নাম], পিতা: [পিতার নাম], ঠিকানা: [ঠিকানা]।</p>'+
-  '<h3>শর্তাবলি</h3><ol><li>[চুক্তির বিষয় ও পরিধি]</li><li>[মূল্য/পারিশ্রমিক ও পরিশোধের নিয়ম]</li><li>[মেয়াদ ও সময়সীমা]</li><li>[কোনো পক্ষ শর্ত ভঙ্গ করলে করণীয়]</li></ol>'+
-  '<p>উভয় পক্ষ স্বেচ্ছায়, সজ্ঞানে ও অন্যের প্ররোচনা ছাড়া নিচে স্বাক্ষর করলেন।</p>'+
-  '<p>প্রথম পক্ষের স্বাক্ষর: ____________</p><p>দ্বিতীয় পক্ষের স্বাক্ষর: ____________</p>'+
-  '<p>সাক্ষী ১: ____________</p><p>সাক্ষী ২: ____________</p>'}
+/* ---------- ডকুমেন্ট বিল্ডার ---------- */
+var U={
+ meta:function(a){return '<table class="mt">'+a.filter(function(x){return x[1]}).map(function(x){return '<tr><td>'+x[0]+'</td><td>: '+esc(x[1])+'</td></tr>'}).join('')+'</table>'},
+ party:function(l,n,a){return '<div class="pt"><small>'+l+'</small><b>'+esc(n)+'</b><div>'+br(a)+'</div></div>'},
+ sub:function(d){return d.items.reduce(function(s,r){return s+num(r.q)*num(r.r)},0)},
+ table:function(t,d){
+  var amt=t.I.some(function(c){return c.k==='r'});
+  var h='<table class="dtb"><tr><th>#</th>'+t.I.map(function(c){return '<th class="'+(c.t==='number'?'r':'')+'">'+c.l+'</th>'}).join('')+(amt?'<th class="r">মোট</th>':'')+'</tr>';
+  d.items.forEach(function(r,i){h+='<tr><td>'+(i+1)+'</td>'+t.I.map(function(c){return '<td class="'+(c.t==='number'?'r':'')+'">'+(c.k==='r'?f2(num(r.r)):esc(r[c.k]))+'</td>'}).join('')+(amt?'<td class="r">'+f2(num(r.q)*num(r.r))+'</td>':'')+'</tr>'});
+  return h+'</table>'},
+ tot:function(d){var s=U.sub(d),ds=num(d.f.disc),tx=(s-ds)*num(d.f.tax)/100;
+  return '<table class="tt"><tr><td>সাবটোটাল</td><td>'+money(s)+'</td></tr>'+(ds?'<tr><td>ছাড়</td><td>- '+money(ds)+'</td></tr>':'')+(tx?'<tr><td>ট্যাক্স ('+esc(d.f.tax)+'%)</td><td>'+money(tx)+'</td></tr>':'')+'<tr class="g"><td>সর্বমোট</td><td>'+money(s-ds+tx)+'</td></tr></table>'},
+ note:function(n){return n?'<p style="margin-top:20px"><b>নোট:</b> '+br(n)+'</p>':''},
+ sign:function(a){return '<div class="sg">'+a.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div>'},
+ kv:function(a){return '<table class="dtb">'+a.map(function(x){return '<tr><td style="width:36%;color:#555">'+x[0]+'</td><td><b>'+x[1]+'</b></td></tr>'}).join('')+'</table>'},
+ sec:function(l,v){return v?'<div class="sec">'+l+'</div><div>'+br(v)+'</div>':''}
 };
-function loadTpl(key,btn){
- if(!isEmpty()&&!confirm('বর্তমান লেখা মুছে নতুন টেমপ্লেট লোড হবে। চালিয়ে যাবেন?'))return;
- var t=TPL[key];
- quill.setContents([]);
- if(t.html)quill.clipboard.dangerouslyPasteHTML(0,t.html);
- state.title=t.title;$('doc-title').value=t.title;
- Array.prototype.forEach.call(document.querySelectorAll('.tpl'),function(b){b.classList.toggle('on',b===btn)});
- render();save();
- quill.focus();
-}
-document.querySelector('.side').addEventListener('click',function(e){
- var b=e.target.closest('.tpl');if(b)loadTpl(b.dataset.t,b);
-});
+var BILLF=['date|তারিখ|date','to|ক্লায়েন্টের নাম','addr|ঠিকানা|area','disc|ছাড় (টাকা)|number|0','tax|ট্যাক্স %|number|0','note|নোট|area'];
+function bill(id,n,t,ic,ds,pre,lab){return{id:id,n:n,t:t,ic:ic,g:'ব্যবসা',ds:ds,f:['no|'+lab+' নং|text|'+pre+'-001'].concat(BILLF),it:['d|বিবরণ|text','q|পরিমাণ|number','r|দর|number'],
+ b:function(d,T){var f=d.f;return U.meta([[lab+' নং',f.no],['তারিখ',f.date]])+U.party('প্রাপক',f.to,f.addr)+U.table(T,d)+U.tot(d)+U.note(f.note)+U.sign(['গ্রহীতার স্বাক্ষর','অনুমোদনকারী'])}}}
+var TOOLS=[
+ /* ===== নতুন টুল যোগ করতে এখানে একটি অবজেক্ট বসান (f=ফিল্ড, it=আইটেম কলাম, b=ডকুমেন্টের কাঠামো) ===== */
+ bill('invoice','ইনভয়েস','INVOICE','receipt','বিল ও ইনভয়েস তৈরি করুন','INV','ইনভয়েস'),
+ bill('quote','কোটেশন','QUOTATION','quote','দামের প্রস্তাব পাঠান','QT','কোটেশন'),
+ {id:'receipt',n:'মানি রিসিপ্ট',t:'MONEY RECEIPT',ic:'wallet',g:'ব্যবসা',ds:'টাকা প্রাপ্তির রসিদ',f:['no|রিসিপ্ট নং|text|MR-001','date|তারিখ|date','from|যার কাছ থেকে প্রাপ্ত','amt|টাকার পরিমাণ|number','for|বাবদ|area','pm|পেমেন্ট মাধ্যম|select|নগদ,ব্যাংক,বিকাশ,নগদ (Nagad),চেক'],
+  b:function(d){var f=d.f;return U.meta([['রিসিপ্ট নং',f.no],['তারিখ',f.date]])+U.kv([['প্রাপ্তির উৎস',esc(f.from)],['পরিমাণ',money(num(f.amt))],['বাবদ',br(f.for)],['মাধ্যম',esc(f.pm)]])+U.sign(['প্রদানকারী','গ্রহীতা'])}},
+ {id:'challan',n:'ডেলিভারি চালান',t:'DELIVERY CHALLAN',ic:'truck',g:'ব্যবসা',ds:'মালামাল সরবরাহের চালান',f:['no|চালান নং|text|DC-001','date|তারিখ|date','to|প্রাপকের নাম','addr|ঠিকানা|area','note|নোট|area'],it:['d|পণ্যের বিবরণ|text','q|পরিমাণ|number'],
+  b:function(d,T){var f=d.f;return U.meta([['চালান নং',f.no],['তারিখ',f.date]])+U.party('প্রাপক',f.to,f.addr)+U.table(T,d)+U.note(f.note)+U.sign(['গ্রহীতা','সরবরাহকারী'])}},
+ {id:'payslip',n:'পে-স্লিপ',t:'PAY SLIP',ic:'wallet',g:'ব্যবসা',ds:'বেতনের স্লিপ',f:['emp|কর্মচারীর নাম','eid|আইডি','desg|পদবি','month|মাস','basic|মূল বেতন|number','allow|ভাতা|number|0','ded|কর্তন|number|0'],
+  b:function(d){var f=d.f;return U.kv([['নাম',esc(f.emp)],['আইডি',esc(f.eid)],['পদবি',esc(f.desg)],['মাস',esc(f.month)],['মূল বেতন',money(num(f.basic))],['ভাতা',money(num(f.allow))],['কর্তন','- '+money(num(f.ded))],['নেট বেতন',money(num(f.basic)+num(f.allow)-num(f.ded))]])+U.sign(['কর্মচারী','কর্তৃপক্ষ'])}},
+ {id:'letter',n:'চিঠি / আবেদন',t:'',ic:'mail',g:'অফিস ও ব্যক্তিগত',ds:'যেকোনো আনুষ্ঠানিক চিঠি',f:['date|তারিখ|date','to|প্রাপকের পদবি ও ঠিকানা|area','sub|বিষয়','body|চিঠির বিষয়বস্তু|area','from|প্রেরকের নাম ও পরিচয়|area'],
+  b:function(d){var f=d.f;return '<p>তারিখ: '+esc(f.date)+'</p><p>বরাবর,<br>'+br(f.to)+'</p><p><b>বিষয়: '+esc(f.sub)+'</b></p><p>জনাব/মহোদয়,</p><p>'+br(f.body)+'</p><p style="margin-top:30px">বিনীত নিবেদক,<br>'+br(f.from)+'</p>'}},
+ {id:'cert',n:'সার্টিফিকেট',t:'',h:0,ic:'award',g:'অফিস ও ব্যক্তিগত',ds:'প্রশংসা ও অংশগ্রহণের সনদ',f:['title|সনদের শিরোনাম|text|Certificate of Achievement','name|প্রাপকের নাম','course|কী কারণে','date|তারিখ|date','by|প্রদানকারী'],
+  b:function(d){var f=d.f;return '<div class="cert"><div class="cn">'+esc(D.set.co)+'</div><h1 style="margin-top:60px">'+esc(f.title)+'</h1><p>এই সনদ প্রদান করা হলো</p><div class="nm">'+esc(f.name)+'</div><p>'+br(f.course)+'</p><p style="margin-top:50px">তারিখ: '+esc(f.date)+'</p>'+U.sign(['','<b>'+esc(f.by)+'</b>'])+'</div>'}},
+ {id:'cv',n:'সিভি / রেজুমে',t:'',h:0,ic:'user',g:'অফিস ও ব্যক্তিগত',ds:'পেশাদার জীবনবৃত্তান্ত',f:['name|নাম','role|পদ / পেশা','phone|ফোন','email|ইমেইল','addr|ঠিকানা','sum|সংক্ষিপ্ত পরিচিতি|area','exp|অভিজ্ঞতা|area','edu|শিক্ষা|area','skill|দক্ষতা|area','lang|ভাষা|area'],
+  b:function(d){var f=d.f;return '<h1 style="margin:0;font-size:30px">'+esc(f.name)+'</h1><div style="color:var(--acc);font-weight:600">'+esc(f.role)+'</div><div style="color:#555">'+[f.phone,f.email,f.addr].filter(Boolean).map(esc).join(' · ')+'</div>'+U.sec('পরিচিতি',f.sum)+U.sec('অভিজ্ঞতা',f.exp)+U.sec('শিক্ষা',f.edu)+U.sec('দক্ষতা',f.skill)+U.sec('ভাষা',f.lang)}},
+ {id:'agree',n:'চুক্তিপত্র',t:'AGREEMENT',ic:'pen',g:'অফিস ও ব্যক্তিগত',ds:'সহজ চুক্তিপত্র / অঙ্গীকারনামা',f:['title|চুক্তির নাম','date|তারিখ|date','p1|প্রথম পক্ষ|area','p2|দ্বিতীয় পক্ষ|area','terms|শর্তাবলি (প্রতি লাইনে একটি)|area','place|স্থান'],
+  b:function(d){var f=d.f;return '<h2 class="ctr" style="font-size:20px">'+esc(f.title)+'</h2><p>এই চুক্তি '+esc(f.date)+' তারিখে '+esc(f.place)+'-এ সম্পাদিত হলো।</p>'+U.party('প্রথম পক্ষ','',f.p1)+U.party('দ্বিতীয় পক্ষ','',f.p2)+'<div class="sec">শর্তাবলি</div><ol>'+String(f.terms).split('\n').filter(function(x){return x.trim()}).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol>'+U.sign(['প্রথম পক্ষ','দ্বিতীয় পক্ষ','সাক্ষী'])}}
+];
+function F(s){var p=s.split('|'),t=p[2]||'text';return{k:p[0],l:p[1],t:t,d:p[3]!==undefined?p[3]:(t==='date'?today:'')}}
+TOOLS.forEach(function(t){t.F=t.f.map(F);t.I=(t.it||[]).map(F)});
 
-/* PDF */
-function fileName(){
- var n=(state.title||'bangla-document').replace(/[\\/:*?"<>|]/g,'').trim();
- return (n||'bangla-document')+'.pdf';
+/* ---------- মডিউল তালিকা ও নেভিগেশন ---------- */
+var MODS=[{id:'home',n:'ড্যাশবোর্ড',ic:'grid',g:'মূল'}]
+ .concat(TOOLS.map(function(t){return{id:t.id,n:t.n,ic:t.ic,g:t.g,tool:t}}))
+ .concat([{id:'editor',n:'ডকুমেন্ট এডিটর',ic:'doc',g:'এডিটর ও কনস্ট্রাকশন',ds:'নিজে লিখে PDF করুন',frame:'editor.html'},
+  {id:'claim',n:'প্রগ্রেস ক্লেইম',ic:'build',g:'এডিটর ও কনস্ট্রাকশন',ds:'নির্মাণ কাজের ক্লেইম ও মেজারমেন্ট',frame:'claim.html'},
+  {id:'img',n:'ছবি থেকে PDF',ic:'image',g:'ইউটিলিটি',ds:'একাধিক ছবি এক PDF-এ'},
+  {id:'settings',n:'সেটিং',ic:'set',g:'সিস্টেম'}]);
+var cur=null,route='home';
+
+function buildNav(filter){
+ var h='',g='',q=(filter||'').toLowerCase();
+ MODS.forEach(function(m){
+  if(q&&m.n.toLowerCase().indexOf(q)<0)return;
+  if(m.g!==g){g=m.g;h+='<div class="gt">'+g+'</div>'}
+  h+='<button class="ni'+(m.id===route?' on':'')+'" data-go="'+m.id+'">'+ico(m.ic)+'<span>'+m.n+'</span></button>'});
+ $('nav').innerHTML=h||'<div class="gt">কিছু পাওয়া যায়নি</div>';
 }
-function downloadPDF(){
- if(isEmpty()){toast('আগে কিছু লিখুন, তারপর PDF ডাউনলোড করুন।');return}
+function applySet(){
+ var s=D.set,r=document.documentElement;
+ r.style.setProperty('--acc',s.acc);document.documentElement.toggleAttribute('data-dark',!!s.dark);
+ $('bname').textContent=s.name;$('logo').textContent=(s.name||'D').trim().charAt(0);
+ document.title=s.name+' — ডকুমেন্ট ও PDF টুলস';
+}
+
+/* ---------- ভিউ: ড্যাশবোর্ড ---------- */
+function vHome(){
+ var td=D.docs.filter(function(x){return x.ts.slice(0,10)===today}).length;
+ var cards=TOOLS.concat(MODS.filter(function(m){return m.frame||m.id==='img'})).map(function(m){return '<button class="tc" data-go="'+m.id+'"><div class="ci">'+ico(m.ic)+'</div><b>'+(m.n)+'</b><small>'+(m.ds||'')+'</small></button>'}).join('');
+ var rows=D.docs.slice().reverse().slice(0,8).map(function(x){var t=TOOLS.filter(function(z){return z.id===x.t})[0];return '<tr><td>'+esc(t?t.n:x.t)+'</td><td>'+esc(x.ti)+'</td><td>'+x.ts.slice(0,10)+'</td><td style="text-align:right;white-space:nowrap"><button class="btn" data-open="'+x.id+'">খুলুন</button> <button class="x" data-deld="'+x.id+'" aria-label="মুছুন">×</button></td></tr>'}).join('');
+ return '<h1>স্বাগতম, '+esc(D.set.name)+'</h1><p class="sub">আপনার সব ডকুমেন্ট টুল এক জায়গায়।</p><div class="cards"><div class="st"><b>'+D.docs.length+'</b><span>সংরক্ষিত ডকুমেন্ট</span></div><div class="st"><b>'+td+'</b><span>আজকের ডকুমেন্ট</span></div><div class="st"><b>'+TOOLS.length+'</b><span>ডকুমেন্ট টুল</span></div><div class="st"><b>'+Object.keys(D.drafts).length+'</b><span>চলমান খসড়া</span></div></div><h2>টুলস</h2><div class="grid">'+cards+'</div><div class="panel"><h2>সাম্প্রতিক ডকুমেন্ট</h2>'+(rows?'<div class="sc"><table class="l"><tr><th>টুল</th><th>শিরোনাম</th><th>তারিখ</th><th></th></tr>'+rows+'</table></div>':'<p class="sub" style="margin:0">এখনো কিছু সংরক্ষণ করা হয়নি। যেকোনো টুল খুলে "সংরক্ষণ" চাপুন।</p>')+'</div>';
+}
+
+/* ---------- ভিউ: টুল ---------- */
+function newData(t){var f={};t.F.forEach(function(x){f[x.k]=x.d});return{f:f,items:t.I.length?[{}]:[]}}
+function fieldH(x,v){
+ var inp=x.t==='area'?'<textarea data-k="'+x.k+'">'+esc(v)+'</textarea>':x.t==='select'?'<select data-k="'+x.k+'">'+x.d.split(',').map(function(o){return '<option'+(o===v?' selected':'')+'>'+o+'</option>'}).join('')+'</select>':'<input type="'+x.t+'" data-k="'+x.k+'" value="'+esc(v)+'"'+(x.t==='number'?' step="any" inputmode="decimal"':'')+'>';
+ return '<div class="f"><label>'+x.l+'</label>'+inp+'</div>'}
+function itemsH(t,d){
+ if(!t.I.length)return '';
+ var h='<h2>আইটেম</h2><div class="sc"><table class="it"><tr>'+t.I.map(function(c){return '<th>'+c.l+'</th>'}).join('')+'<th></th></tr>';
+ d.items.forEach(function(r,i){h+='<tr>'+t.I.map(function(c){return '<td><input type="'+c.t+'"'+(c.t==='number'?' step="any" inputmode="decimal"':'')+' data-i="'+i+'" data-c="'+c.k+'" value="'+esc(r[c.k])+'"></td>'}).join('')+'<td><button class="x" data-deli="'+i+'" aria-label="মুছুন">×</button></td></tr>'});
+ return h+'</table></div><button class="btn" data-addi="1">'+ico('plus')+' আইটেম যোগ</button>'}
+function paper(t,d){
+ var s=D.set;
+ var head=t.h===0?'':'<div class="dh"><div><div class="cn">'+esc(s.co)+'</div><div class="ca">'+br(s.addr)+'<br>'+esc(s.phone)+' '+esc(s.email)+'</div></div><div class="dt">'+esc(t.t)+'</div></div>';
+ return '<div class="paper">'+head+t.b(d,t)+'</div>'}
+function vTool(t){
+ cur={t:t,d:D.drafts[t.id]||newData(t)};
+ return '<div class="tabs"><button class="btn p" data-tab="f">ফর্ম</button><button class="btn" data-tab="p">প্রিভিউ</button></div><div class="tw" data-v="f"><div class="fp"><h1>'+t.n+'</h1><p class="sub">'+t.ds+'</p><div class="tb"><button class="btn p" data-act="pdf">'+ico('dl')+' PDF</button><button class="btn" data-act="save">'+ico('save')+' সংরক্ষণ</button><button class="btn" data-act="print">'+ico('print')+' প্রিন্ট</button><button class="btn" data-act="reset">'+ico('reset')+' নতুন</button></div><div id="ff">'+t.F.map(function(x){return fieldH(x,cur.d.f[x.k]==null?x.d:cur.d.f[x.k])}).join('')+'</div><div id="fi">'+itemsH(t,cur.d)+'</div></div><div class="pv" id="stage"><div id="wrap"></div></div></div>';
+}
+function draw(){
+ if(!cur)return;var w=$('wrap');if(!w)return;
+ w.innerHTML=paper(cur.t,cur.d);fit();
+}
+function fit(){
+ var st=$('stage'),w=$('wrap');if(!st||!w)return;var p=w.firstChild;if(!p)return;
+ var k=Math.min(1,(st.clientWidth-8)/794);if(!isFinite(k)||k<=0)k=1;
+ p.style.transform='scale('+k+')';w.style.width=(794*k)+'px';w.style.height=(p.offsetHeight*k)+'px';
+}
+function docTitle(){var f=cur.d.f;return (f.no||f.name||f.emp||f.title||f.sub||f.to||cur.t.n)+''}
+function pdfOf(html,w,name,orient,btn){
  if(typeof html2pdf==='undefined'){toast('PDF টুল লোড হয়নি। ইন্টারনেট দেখে রিলোড করুন।');return}
- var s=SIZES[state.size],btn=$('btn-pdf');
- btn.disabled=true;btn.textContent='তৈরি হচ্ছে...';
- var holder=document.createElement('div');
- holder.style.cssText='position:fixed;left:-99999px;top:0;width:'+(s.w-2*s.m)+'mm;background:#fff';
- var c=document.createElement('div');
- c.className='doc';c.style.cssText='font-size:'+s.fs+'px;font-family:'+FONTS[state.font];
- c.innerHTML=quill.root.innerHTML;
- holder.appendChild(c);document.body.appendChild(holder);
- var done=function(){document.body.removeChild(holder);btn.disabled=false;btn.textContent='PDF ডাউনলোড'};
- var go=function(){
-  html2pdf().set({
-   margin:[s.m,s.m,s.m,s.m],
-   filename:fileName(),
-   image:{type:'jpeg',quality:0.95},
-   html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},
-   jsPDF:{unit:'mm',format:state.size,orientation:'portrait'},
-   pagebreak:{mode:['css','legacy'],avoid:['p','li','h1','h2','h3']}
-  }).from(c).save().then(function(){toast('PDF ডাউনলোড হয়েছে।')})
-   .catch(function(){toast('PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।')})
-   .then(done);
- };
- (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go);
+ var lab=btn&&btn.innerHTML;if(btn){btn.disabled=true}
+ var h=document.createElement('div');h.className='pdf';h.style.cssText='position:fixed;left:-99999px;top:0;width:'+w+'px';h.innerHTML=html;document.body.appendChild(h);
+ html2pdf().set({margin:0,filename:name,image:{type:'jpeg',quality:0.97},html2canvas:{scale:2,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:orient||'portrait'},pagebreak:{mode:['css'],avoid:'tr'}})
+  .from(h).save().then(function(){toast('PDF ডাউনলোড হয়েছে।')}).catch(function(){toast('PDF তৈরি করা যায়নি।')})
+  .then(function(){document.body.removeChild(h);if(btn){btn.disabled=false}});
 }
-$('btn-pdf').addEventListener('click',downloadPDF);
-$('btn-print').addEventListener('click',function(){
- if(isEmpty()){toast('আগে কিছু লিখুন।');return}
- var prev=document.title;document.title=fileName().replace(/\.pdf$/,'');
- window.print();document.title=prev;
-});
-var pst=document.createElement('style');document.head.appendChild(pst);
-window.addEventListener('beforeprint',function(){pst.textContent='@page{size:'+SIZES[state.size].name+' portrait;margin:0}';$('print-area').style.transform='none'});
-window.addEventListener('afterprint',fit);
+function safe(s){return (String(s).replace(/[\\/:*?"<>|]/g,'').trim()||'document')}
 
-/* আগের সংরক্ষিত ডকুমেন্ট ফিরিয়ে আনা */
-try{
- var d=JSON.parse(localStorage.getItem(KEY)||'null');
- if(d){
-  if(SIZES[d.size])state.size=d.size;
-  if(FONTS[d.font])state.font=d.font;
-  if(d.title)state.title=String(d.title).slice(0,60);
-  $('page-size').value=state.size;$('doc-font').value=state.font;$('doc-title').value=state.title;
-  if(d.html)quill.clipboard.dangerouslyPasteHTML(0,d.html);
- }
-}catch(e){}
-applySize();render();
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+/* ---------- ভিউ: ছবি থেকে PDF ---------- */
+var IMGS=[];
+function vImg(){
+ return '<h1>ছবি থেকে PDF</h1><p class="sub">একাধিক ছবি বেছে এক PDF বানান। ছবির ক্রম বদলাতে মুছে আবার যোগ করুন।</p><div class="panel"><div class="f"><label>ছবি বাছাই করুন</label><input type="file" id="imf" accept="image/*" multiple></div><div class="f" style="max-width:240px"><label>পেজের দিক</label><select id="imo"><option value="portrait">খাড়া (Portrait)</option><option value="landscape">আড়াআড়ি (Landscape)</option></select></div><div id="iml" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0"></div><button class="btn p" data-act="imgpdf">'+ico('dl')+' PDF বানান</button></div>';
+}
+function imList(){var l=$('iml');if(!l)return;l.innerHTML=IMGS.map(function(s,i){return '<div style="position:relative"><img src="'+s+'" alt="" style="height:90px;border-radius:8px;border:1px solid var(--line)"><button class="x" data-delimg="'+i+'" style="position:absolute;top:-8px;right:-6px;background:var(--card);border-radius:50%" aria-label="মুছুন">×</button></div>'}).join('')}
+
+/* ---------- ভিউ: সেটিং ---------- */
+function vSet(){
+ var s=D.set,f=function(k,l,t){return '<div class="f"><label>'+l+'</label><input type="'+(t||'text')+'" data-s="'+k+'" value="'+esc(s[k])+'"></div>'};
+ var sw=['#0f6b5c','#2563eb','#7c3aed','#db2777','#ea580c','#0f766e','#334155'].map(function(c){return '<button style="background:'+c+'" data-acc="'+c+'" aria-label="'+c+'"></button>'}).join('');
+ return '<h1>সেটিং</h1><p class="sub">এখানের তথ্য সব ডকুমেন্টের হেডারে বসবে।</p><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="panel"><h2>ব্র্যান্ড ও কোম্পানি</h2>'+f('name','সাইটের নাম')+f('co','কোম্পানির নাম')+'<div class="f"><label>ঠিকানা</label><textarea data-s="addr">'+esc(s.addr)+'</textarea></div>'+f('phone','ফোন')+f('email','ইমেইল','email')+f('cur','মুদ্রা চিহ্ন (RM, ৳, $)')+'</div><div class="panel"><h2>চেহারা</h2><div class="f"><label>মূল রঙ</label><div class="sw">'+sw+'<input type="color" data-s="acc" value="'+esc(s.acc)+'" aria-label="নিজের রঙ" style="width:36px;height:30px;padding:0;border:0"></div></div><label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="dk"'+(s.dark?' checked':'')+'> ডার্ক মোড</label><h2 style="margin-top:24px">ডেটা ব্যাকআপ</h2><p class="sub" style="margin-bottom:10px">সব ডেটা শুধু এই ব্রাউজারে থাকে। নিয়মিত ব্যাকআপ রাখুন।</p><div class="tb"><button class="btn" data-act="exp">'+ico('dl')+' ব্যাকআপ নিন</button><label class="btn" style="cursor:pointer">'+ico('open')+' রিস্টোর<input type="file" id="imp" accept=".json" hidden></label><button class="btn" data-act="wipe" style="color:#d92d20">'+ico('trash')+' সব মুছুন</button></div></div></div>';
+}
+
+/* ---------- রাউটার ---------- */
+function go(id){
+ var m=MODS.filter(function(x){return x.id===id})[0]||MODS[0];route=m.id;cur=null;
+ var v=$('view');
+ if(m.tool)v.innerHTML=vTool(m.tool);
+ else if(m.frame)v.innerHTML='<iframe class="fr" src="'+m.frame+'" title="'+m.n+'"></iframe>';
+ else if(m.id==='img')v.innerHTML=vImg();
+ else if(m.id==='settings')v.innerHTML=vSet();
+ else v.innerHTML=vHome();
+ if(m.tool)draw();
+ v.style.padding=m.frame?'0':'';
+ if(location.hash!=='#/'+m.id)history.replaceState(null,'','#/'+m.id);
+ buildNav($('q').value);$('side').classList.remove('open');$('scrim').classList.remove('on');v.scrollTop=0;
+}
+
+/* ---------- ইভেন্ট ---------- */
+document.addEventListener('click',function(e){
+ var b=e.target.closest('button,label');if(!b)return;var d=b.dataset;
+ if(d.go){go(d.go);return}
+ if(d.tab){var tw=document.querySelector('.tw');tw.dataset.v=d.tab;document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('p',x===b)});setTimeout(fit,0);return}
+ if(d.open){var x=D.docs.filter(function(z){return z.id==d.open})[0];if(x){D.drafts[x.t]=JSON.parse(JSON.stringify(x.d));save();go(x.t)}return}
+ if(d.deld){D.docs=D.docs.filter(function(z){return z.id!=d.deld});save();go('home');return}
+ if(d.acc){D.set.acc=d.acc;save();applySet();return}
+ if(d.addi){cur.d.items.push({});$('fi').innerHTML=itemsH(cur.t,cur.d);D.drafts[cur.t.id]=cur.d;save();draw();return}
+ if(d.deli!==undefined){cur.d.items.splice(+d.deli,1);if(!cur.d.items.length)cur.d.items.push({});$('fi').innerHTML=itemsH(cur.t,cur.d);D.drafts[cur.t.id]=cur.d;save();draw();return}
+ if(d.delimg!==undefined){IMGS.splice(+d.delimg,1);imList();return}
+ var a=d.act;if(!a)return;
+ if(a==='pdf'){var f=cur.d.f;pdfOf(paper(cur.t,cur.d),794,safe(cur.t.n+'-'+docTitle())+'.pdf','portrait',b)}
+ else if(a==='print')window.print();
+ else if(a==='save'){D.docs.push({id:Date.now(),t:cur.t.id,ti:docTitle(),d:JSON.parse(JSON.stringify(cur.d)),ts:new Date().toISOString()});save();toast('সংরক্ষিত হয়েছে। ড্যাশবোর্ডে দেখতে পাবেন।')}
+ else if(a==='reset'){if(!confirm('ফর্ম খালি করে নতুন করবেন?'))return;delete D.drafts[cur.t.id];save();go(cur.t.id)}
+ else if(a==='imgpdf'){
+  if(!IMGS.length){toast('আগে ছবি বাছাই করুন।');return}
+  var o=$('imo').value,w=o==='landscape'?1123:794,hh=o==='landscape'?794:1123;
+  pdfOf(IMGS.map(function(s,i){return '<div style="width:'+w+'px;height:'+(hh-2)+'px;display:flex;align-items:center;justify-content:center;background:#fff;'+(i<IMGS.length-1?'page-break-after:always':'')+'"><img src="'+s+'" style="max-width:96%;max-height:96%;object-fit:contain"></div>'}).join(''),w,'images.pdf',o,b)}
+ else if(a==='exp'){var bl=new Blob([JSON.stringify(D)],{type:'application/json'}),u=document.createElement('a');u.href=URL.createObjectURL(bl);u.download='doc-studio-backup.json';u.click();setTimeout(function(){URL.revokeObjectURL(u.href)},1000)}
+ else if(a==='wipe'){if(confirm('সব সংরক্ষিত ডকুমেন্ট, খসড়া ও সেটিং মুছে যাবে। নিশ্চিত?')){D={set:Object.assign({},DEF),docs:[],drafts:{}};save();applySet();go('home')}}
+});
+document.addEventListener('input',function(e){
+ var t=e.target,d=t.dataset;
+ if(d.k!==undefined&&cur){cur.d.f[d.k]=t.value}
+ else if(d.i!==undefined&&cur){cur.d.items[+d.i][d.c]=t.value}
+ else if(d.s!==undefined){D.set[d.s]=t.value;if(d.s==='acc'||d.s==='name')applySet()}
+ else return;
+ if(cur){D.drafts[cur.t.id]=cur.d;draw()}save();
+});
+document.addEventListener('change',function(e){
+ var t=e.target;
+ if(t.id==='dk'){D.set.dark=t.checked?1:0;save();applySet()}
+ else if(t.id==='imf'){Array.prototype.forEach.call(t.files,function(f){var r=new FileReader();r.onload=function(){IMGS.push(r.result);imList()};r.readAsDataURL(f)});t.value=''}
+ else if(t.id==='imp'&&t.files[0]){var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result);if(!j.set)throw 0;D=j;D.docs=D.docs||[];D.drafts=D.drafts||{};D.set=Object.assign({},DEF,D.set);save();applySet();go('home');toast('রিস্টোর হয়েছে।')}catch(x){toast('ফাইলটি সঠিক ব্যাকআপ নয়।')}};r.readAsText(t.files[0])}
+});
+$('q').addEventListener('input',function(){buildNav(this.value)});
+$('q').addEventListener('keydown',function(e){if(e.key==='Enter'){var m=MODS.filter(function(x){return x.n.toLowerCase().indexOf($('q').value.toLowerCase())>=0})[0];if(m){$('q').value='';go(m.id)}}});
+$('burger').addEventListener('click',function(){$('side').classList.add('open');$('scrim').classList.add('on')});
+$('scrim').addEventListener('click',function(){$('side').classList.remove('open');this.classList.remove('on')});
+$('theme').addEventListener('click',function(){D.set.dark=D.set.dark?0:1;save();applySet()});
+$('gear').addEventListener('click',function(){go('settings')});
+window.addEventListener('hashchange',function(){var id=location.hash.replace('#/','');if(id!==route)go(id)});
+window.addEventListener('resize',fit);
+$('burger').innerHTML=ico('menu');$('si').innerHTML=ico('search');$('theme').innerHTML=ico('moon');$('gear').innerHTML=ico('set');
+applySet();go(location.hash.replace('#/','')||'home');
 })();
 </script>
 </body>

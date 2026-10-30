@@ -113,7 +113,7 @@ select{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 8px
 <body>
 <header class="top">
  <b>প্রগ্রেস ক্লেইম মেকার</b>
- <a class="btn" href="index.html" style="text-decoration:none">← ডকুমেন্ট মেকার</a>
+ <a class="btn" id="back" href="index.html" style="text-decoration:none">← ড্যাশবোর্ড</a>
  <button class="btn" id="b-clear" type="button">ফর্ম খালি করো</button>
  <button class="btn" id="b-print" type="button">প্রিন্ট</button>
  <button class="btn" id="b-meas" type="button" style="display:none">মেজারমেন্ট শিট PDF</button>
@@ -305,6 +305,7 @@ $('b-print').addEventListener('click',function(){var p=document.title;document.t
 window.addEventListener('beforeprint',function(){$('sheets').style.transform='none'});
 window.addEventListener('afterprint',fit);
 window.addEventListener('resize',fit);
+if(window.self!==window.top)$('back').style.display='none';
 cellsFix();buildForm();render();
 })();
 </script>
