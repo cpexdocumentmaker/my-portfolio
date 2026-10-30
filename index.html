@@ -1,145 +1,304 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বাংলা ডকুমেন্ট ও পিডিএফ মেকার</title>
-    <meta name="description" content="সহজে বাংলা ডকুমেন্ট তৈরি করুন এবং পিডিএফ ডাউনলোড করুন।">
-    
-  
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
-    
-  
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <style>
-        body {
-            font-family: 'Noto Sans Bengali', sans-serif;
-            background-color: #f3f4f6;
-        }
-        .ql-editor {
-            font-family: 'Noto Sans Bengali', sans-serif;
-            font-size: 16px;
-            min-height: 300px;
-        }
-        
-        #print-area {
-            background: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin: 0 auto;
-        }
-        
-        
-        @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-            @page { margin: 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>বাংলা ডকুমেন্ট ও পিডিএফ মেকার</title>
+<meta name="description" content="সহজে বাংলা ডকুমেন্ট তৈরি করুন এবং পিডিএফ ডাউনলোড করুন।">
+<meta name="theme-color" content="#0f6b5c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📄%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet">
+<style>
+:root{--ink:#1f2430;--muted:#667085;--line:#d9dee5;--desk:#e8ebef;--paper:#fff;--accent:#0f6b5c;--accent-d:#0a5448;--accent-l:#e3f1ee;--pw:210mm;--ph:297mm;--m:20mm;--doc-font:'Noto Serif Bengali',serif;--doc-size:16px}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:'Noto Sans Bengali',system-ui,sans-serif;color:var(--ink);background:var(--desk);display:flex;flex-direction:column}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.top{background:var(--paper);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:700;color:var(--accent);font-size:18px;margin-right:4px;white-space:nowrap}
+#doc-title{flex:1;min-width:140px;border:1px solid transparent;border-radius:8px;padding:7px 10px;font-weight:600;background:transparent}
+#doc-title:hover,#doc-title:focus{border-color:var(--line);background:#fff}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer}
+.btn:hover,select:hover{border-color:#aeb7c2}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn.primary:hover{background:var(--accent-d)}
+.btn:disabled{opacity:.6;cursor:wait}
+.body{flex:1;display:flex;min-height:0}
+.side{width:210px;background:var(--paper);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.side h2{font-size:13px;color:var(--muted);font-weight:600;margin:4px 6px 6px}
+.tpl{text-align:left;border:0;background:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:15px}
+.tpl:hover{background:#f3f5f7}
+.tpl.on{background:var(--accent-l);color:var(--accent-d);font-weight:600}
+.work{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:16px;min-width:0;min-height:0}
+.pane{min-width:0;min-height:0;display:flex;flex-direction:column}
+.editor-card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
+#editor-container{flex:1;overflow-y:auto;border:0!important;font-family:var(--doc-font)}
+.ql-toolbar.ql-snow{border:0!important;border-bottom:1px solid var(--line)!important;background:#fafbfc}
+.ql-editor{font-family:var(--doc-font);font-size:16px;line-height:1.8;min-height:240px}
+.ql-editor.ql-blank::before{font-style:normal;color:#9aa3af}
+.stage{flex:1;overflow:auto;min-height:0;padding-bottom:24px}
+.pagewrap{margin:0 auto;position:relative}
+#print-area{background:var(--paper);box-shadow:0 2px 12px rgba(20,30,50,.15);width:var(--pw);min-height:var(--ph);padding:var(--m);transform-origin:top left;position:absolute;left:0;top:0}
+.doc{font-family:var(--doc-font);font-size:var(--doc-size);line-height:1.85;color:#111;text-align:justify;overflow-wrap:anywhere}
+.doc p,.doc ul,.doc ol,.doc h1,.doc h2,.doc h3{margin:0 0 .7em}
+.doc h1{font-size:1.7em;line-height:1.4;text-align:center}
+.doc h2{font-size:1.4em;line-height:1.4}
+.doc h3{font-size:1.2em;line-height:1.4}
+.doc ul,.doc ol{padding-left:1.7em}
+.doc ul{list-style:disc}.doc ol{list-style:decimal}
+.doc li{margin:0 0 .25em}
+.doc .ql-align-center{text-align:center}.doc .ql-align-right{text-align:right}.doc .ql-align-justify{text-align:justify}
+.doc .ql-indent-1{padding-left:3em}.doc .ql-indent-2{padding-left:6em}.doc .ql-indent-3{padding-left:9em}
+.doc p,.doc li,.doc h1,.doc h2,.doc h3{break-inside:avoid}
+.empty{color:#9aa3af;text-align:center;margin-top:30mm}
+.status{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:8px 4px 0}
+.tabs{display:none}
+#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#1f2430;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:900px){
+ .side{display:none}
+ .work{grid-template-columns:1fr;padding:10px}
+ .tabs{display:flex;background:var(--paper);border-bottom:1px solid var(--line)}
+ .tabs button{flex:1;border:0;background:none;padding:11px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer}
+ .tabs button.on{color:var(--accent);border-color:var(--accent)}
+ .work[data-view=edit] .pane.view{display:none}
+ .work[data-view=view] .pane.edit{display:none}
+ .brand{width:100%}
+}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+@media print{
+ @page{margin:0}
+ body{display:block;background:#fff;height:auto}
+ .top,.side,.tabs,.pane.edit,.status,#toast{display:none!important}
+ .work,.pane,.stage,.pagewrap{display:block!important;padding:0!important;overflow:visible!important;height:auto!important;width:auto!important}
+ #print-area{position:static!important;transform:none!important;box-shadow:none;width:100%;min-height:0}
+}
+</style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body>
 
-    
-    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col hidden md:flex">
-        <div class="p-5 border-b border-gray-200">
-            <h1 class="text-xl font-bold text-blue-700">ডকুমেন্ট মেকার</h1>
-        </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            
-            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg bg-blue-50 text-blue-700 font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                নতুন ডকুমেন্ট
-            </button>
-            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg hover:bg-gray-50 text-gray-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                আবেদনপত্র
-            </button>
-            <button class="flex items-center gap-3 w-full p-3 text-left rounded-lg hover:bg-gray-50 text-gray-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                চুক্তিপত্র
-            </button>
-        </nav>
-    </aside>
+<header class="top">
+ <div class="brand">ডকুমেন্ট মেকার</div>
+ <input id="doc-title" type="text" value="নামহীন ডকুমেন্ট" aria-label="ডকুমেন্টের নাম" maxlength="60">
+ <div class="tools">
+  <select id="doc-font" aria-label="ফন্ট">
+   <option value="serif">সেরিফ ফন্ট</option>
+   <option value="sans">সান্স ফন্ট</option>
+  </select>
+  <select id="page-size" aria-label="পেজ সাইজ">
+   <option value="a4">A4 সাইজ</option>
+   <option value="a5">A5 সাইজ</option>
+  </select>
+  <button class="btn" id="btn-print" type="button">প্রিন্ট</button>
+  <button class="btn primary" id="btn-pdf" type="button">PDF ডাউনলোড</button>
+ </div>
+</header>
 
-    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-      
-        <header class="bg-white border-b border-gray-200 p-4 flex justify-between items-center z-10 shadow-sm">
-            <h2 class="text-lg font-semibold text-gray-800">এডিটর</h2>
-            <div class="flex items-center gap-3">
-                <select id="page-size" class="border border-gray-300 rounded p-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="a4">A4 সাইজ</option>
-                    <option value="a5">A5 সাইজ</option>
-                </select>
-                <button onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold text-sm shadow transition">
-                    PDF ডাউনলোড
-                </button>
-            </div>
-        </header>
+<nav class="tabs" id="tabs" aria-label="ভিউ">
+ <button type="button" data-v="edit" class="on">এডিটর</button>
+ <button type="button" data-v="view">প্রিভিউ</button>
+</nav>
 
-      
-        <div class="flex-1 overflow-y-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 bg-gray-100">
-            
-        
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[500px] lg:h-auto">
-                <div id="editor-container" class="flex-1 overflow-y-auto"></div>
-            </div>
+<div class="body">
+ <aside class="side" aria-label="টেমপ্লেট">
+  <h2>টেমপ্লেট</h2>
+  <button class="tpl on" type="button" data-t="blank">নতুন ডকুমেন্ট</button>
+  <button class="tpl" type="button" data-t="application">আবেদনপত্র</button>
+  <button class="tpl" type="button" data-t="contract">চুক্তিপত্র</button>
+ </aside>
 
-        
-            <div class="overflow-auto flex justify-center items-start pb-10">
-                <div id="print-area" class="w-[210mm] min-h-[297mm] p-[20mm] text-justify leading-relaxed text-gray-800 text-base">
-                  
-                    <div id="preview-content" class="prose max-w-none">
-                        <p class="text-gray-400 text-center mt-20">এখানে আপনার ডকুমেন্টের প্রিভিউ দেখা যাবে...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+ <main class="work" id="work" data-view="edit">
+  <section class="pane edit">
+   <div class="editor-card"><div id="editor-container"></div></div>
+   <div class="status"><span id="count">০ শব্দ</span><span id="saved">স্বয়ংক্রিয় সংরক্ষণ চালু</span></div>
+  </section>
+  <section class="pane view">
+   <div class="stage" id="stage">
+    <div class="pagewrap" id="pagewrap">
+     <div id="print-area"><div id="preview-content" class="doc"></div></div>
+    </div>
+   </div>
+  </section>
+ </main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
 
-    <!-- html2pdf.js (PDF তৈরির জন্য) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var KEY='bdm_doc_v1', MM=96/25.4;
+var SIZES={a4:{w:210,h:297,m:20,fs:16,name:'A4'},a5:{w:148,h:210,m:14,fs:14,name:'A5'}};
+var FONTS={serif:"'Noto Serif Bengali',serif",sans:"'Noto Sans Bengali',sans-serif"};
 
-    <script>
-        // Quill এডিটর চালু করা
-        var quill = new Quill('#editor-container', {
-            theme: 'snow',
-            placeholder: 'এখানে আপনার ডকুমেন্ট লিখুন...',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['clean']
-                ]
-            }
-        });
+if(typeof Quill==='undefined'){
+ document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">এডিটর লোড হয়নি। ইন্টারনেট সংযোগ দেখে পেজটি রিলোড করুন।</p>';
+ return;
+}
 
-        quill.on('text-change', function() {
-            const html = quill.root.innerHTML;
-            document.getElementById('preview-content').innerHTML = html;
-        });
+var quill=new Quill('#editor-container',{
+ theme:'snow',
+ placeholder:'এখানে আপনার ডকুমেন্ট লিখুন...',
+ modules:{toolbar:[[{header:[1,2,3,false]}],['bold','italic','underline'],[{list:'ordered'},{list:'bullet'}],[{align:[]}],[{indent:'-1'},{indent:'+1'}],['clean']]}
+});
 
-        
-        function downloadPDF() {
-            const element = document.getElementById('print-area');
-            const pageSize = document.getElementById('page-size').value;
+var state={size:'a4',font:'serif',title:'নামহীন ডকুমেন্ট'};
+var timer=null;
 
-            const opt = {
-                margin:       0,
-                filename:     'bangla-document.pdf',
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 3, useCORS: true }, // Scale 3 দিলে কোয়ালিটি খুব ভালো হয়
-                jsPDF:        { unit: 'mm', format: pageSize, orientation: 'portrait' }
-            };
+function toast(msg){
+ var t=$('toast');t.textContent=msg;t.classList.add('show');
+ clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2600);
+}
+function isEmpty(){return quill.getText().trim().length===0}
+function bn(n){return String(n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})}
 
-            
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
+function applySize(){
+ var s=SIZES[state.size],r=document.documentElement.style;
+ r.setProperty('--pw',s.w+'mm');r.setProperty('--ph',s.h+'mm');
+ r.setProperty('--m',s.m+'mm');r.setProperty('--doc-size',s.fs+'px');
+ r.setProperty('--sz',s.name);
+ r.setProperty('--doc-font',FONTS[state.font]);
+ fit();
+}
+
+function fit(){
+ var s=SIZES[state.size],pa=$('print-area'),wrap=$('pagewrap'),stage=$('stage');
+ var avail=stage.clientWidth-8,full=s.w*MM,k=Math.min(1,avail/full);
+ if(!isFinite(k)||k<=0)k=1;
+ pa.style.transform='scale('+k+')';
+ wrap.style.width=(full*k)+'px';
+ wrap.style.height=(pa.offsetHeight*k)+'px';
+}
+
+function render(){
+ var html=quill.root.innerHTML;
+ $('preview-content').innerHTML=isEmpty()?'<p class="empty">এখানে আপনার ডকুমেন্টের প্রিভিউ দেখা যাবে...</p>':html;
+ var words=quill.getText().trim().split(/\s+/).filter(Boolean).length;
+ $('count').textContent=bn(isEmpty()?0:words)+' শব্দ';
+ fit();
+}
+
+function save(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify({html:quill.root.innerHTML,size:state.size,font:state.font,title:state.title}));
+  $('saved').textContent='সংরক্ষিত হয়েছে';
+ }catch(e){$('saved').textContent='সংরক্ষণ সম্ভব হয়নি'}
+}
+function queueSave(){
+ $('saved').textContent='সংরক্ষণ হচ্ছে...';
+ clearTimeout(timer);timer=setTimeout(save,600);
+}
+
+quill.on('text-change',function(){render();queueSave()});
+
+/* টাইটেল, সাইজ, ফন্ট */
+$('doc-title').addEventListener('input',function(e){state.title=e.target.value;queueSave()});
+$('page-size').addEventListener('change',function(e){state.size=e.target.value;applySize();queueSave()});
+$('doc-font').addEventListener('change',function(e){state.font=e.target.value;applySize();queueSave()});
+window.addEventListener('resize',fit);
+
+/* মোবাইল ট্যাব */
+$('tabs').addEventListener('click',function(e){
+ var b=e.target.closest('button');if(!b)return;
+ Array.prototype.forEach.call(this.children,function(c){c.classList.toggle('on',c===b)});
+ $('work').dataset.view=b.dataset.v;
+ setTimeout(fit,0);
+});
+
+/* টেমপ্লেট */
+var today=new Date().toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'});
+var TPL={
+ blank:{title:'নামহীন ডকুমেন্ট',html:''},
+ application:{title:'আবেদনপত্র',html:
+  '<p>তারিখ: '+today+'</p><p>বরাবর,<br>[প্রাপকের পদবি]<br>[প্রতিষ্ঠানের নাম]<br>[ঠিকানা]</p>'+
+  '<p><strong>বিষয়: [আবেদনের বিষয়]।</strong></p><p>জনাব/মহোদয়,</p>'+
+  '<p>বিনীত নিবেদন এই যে, [আপনার পরিচয় ও আবেদনের কারণ বিস্তারিত লিখুন]। এমতাবস্থায়, আপনার নিকট বিনীত অনুরোধ, [আপনার চাওয়া] মঞ্জুর করে আমাকে বাধিত করবেন।</p>'+
+  '<p>বিনীত নিবেদক,<br>[আপনার নাম]<br>[পদবি/পরিচয়]<br>মোবাইল: [নম্বর]</p>'},
+ contract:{title:'চুক্তিপত্র',html:
+  '<h1>চুক্তিপত্র</h1><p>এই চুক্তিপত্র '+today+' তারিখে সম্পাদিত হলো।</p>'+
+  '<p><strong>প্রথম পক্ষ:</strong> [নাম], পিতা: [পিতার নাম], ঠিকানা: [ঠিকানা]।</p>'+
+  '<p><strong>দ্বিতীয় পক্ষ:</strong> [নাম], পিতা: [পিতার নাম], ঠিকানা: [ঠিকানা]।</p>'+
+  '<h3>শর্তাবলি</h3><ol><li>[চুক্তির বিষয় ও পরিধি]</li><li>[মূল্য/পারিশ্রমিক ও পরিশোধের নিয়ম]</li><li>[মেয়াদ ও সময়সীমা]</li><li>[কোনো পক্ষ শর্ত ভঙ্গ করলে করণীয়]</li></ol>'+
+  '<p>উভয় পক্ষ স্বেচ্ছায়, সজ্ঞানে ও অন্যের প্ররোচনা ছাড়া নিচে স্বাক্ষর করলেন।</p>'+
+  '<p>প্রথম পক্ষের স্বাক্ষর: ____________</p><p>দ্বিতীয় পক্ষের স্বাক্ষর: ____________</p>'+
+  '<p>সাক্ষী ১: ____________</p><p>সাক্ষী ২: ____________</p>'}
+};
+function loadTpl(key,btn){
+ if(!isEmpty()&&!confirm('বর্তমান লেখা মুছে নতুন টেমপ্লেট লোড হবে। চালিয়ে যাবেন?'))return;
+ var t=TPL[key];
+ quill.setContents([]);
+ if(t.html)quill.clipboard.dangerouslyPasteHTML(0,t.html);
+ state.title=t.title;$('doc-title').value=t.title;
+ Array.prototype.forEach.call(document.querySelectorAll('.tpl'),function(b){b.classList.toggle('on',b===btn)});
+ render();save();
+ quill.focus();
+}
+document.querySelector('.side').addEventListener('click',function(e){
+ var b=e.target.closest('.tpl');if(b)loadTpl(b.dataset.t,b);
+});
+
+/* PDF */
+function fileName(){
+ var n=(state.title||'bangla-document').replace(/[\\/:*?"<>|]/g,'').trim();
+ return (n||'bangla-document')+'.pdf';
+}
+function downloadPDF(){
+ if(isEmpty()){toast('আগে কিছু লিখুন, তারপর PDF ডাউনলোড করুন।');return}
+ if(typeof html2pdf==='undefined'){toast('PDF টুল লোড হয়নি। ইন্টারনেট দেখে রিলোড করুন।');return}
+ var s=SIZES[state.size],btn=$('btn-pdf');
+ btn.disabled=true;btn.textContent='তৈরি হচ্ছে...';
+ var holder=document.createElement('div');
+ holder.style.cssText='position:fixed;left:-99999px;top:0;width:'+(s.w-2*s.m)+'mm;background:#fff';
+ var c=document.createElement('div');
+ c.className='doc';c.style.cssText='font-size:'+s.fs+'px;font-family:'+FONTS[state.font];
+ c.innerHTML=quill.root.innerHTML;
+ holder.appendChild(c);document.body.appendChild(holder);
+ var done=function(){document.body.removeChild(holder);btn.disabled=false;btn.textContent='PDF ডাউনলোড'};
+ var go=function(){
+  html2pdf().set({
+   margin:[s.m,s.m,s.m,s.m],
+   filename:fileName(),
+   image:{type:'jpeg',quality:0.95},
+   html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},
+   jsPDF:{unit:'mm',format:state.size,orientation:'portrait'},
+   pagebreak:{mode:['css','legacy'],avoid:['p','li','h1','h2','h3']}
+  }).from(c).save().then(function(){toast('PDF ডাউনলোড হয়েছে।')})
+   .catch(function(){toast('PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।')})
+   .then(done);
+ };
+ (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go);
+}
+$('btn-pdf').addEventListener('click',downloadPDF);
+$('btn-print').addEventListener('click',function(){
+ if(isEmpty()){toast('আগে কিছু লিখুন।');return}
+ var prev=document.title;document.title=fileName().replace(/\.pdf$/,'');
+ window.print();document.title=prev;
+});
+var pst=document.createElement('style');document.head.appendChild(pst);
+window.addEventListener('beforeprint',function(){pst.textContent='@page{size:'+SIZES[state.size].name+' portrait;margin:0}';$('print-area').style.transform='none'});
+window.addEventListener('afterprint',fit);
+
+/* আগের সংরক্ষিত ডকুমেন্ট ফিরিয়ে আনা */
+try{
+ var d=JSON.parse(localStorage.getItem(KEY)||'null');
+ if(d){
+  if(SIZES[d.size])state.size=d.size;
+  if(FONTS[d.font])state.font=d.font;
+  if(d.title)state.title=String(d.title).slice(0,60);
+  $('page-size').value=state.size;$('doc-font').value=state.font;$('doc-title').value=state.title;
+  if(d.html)quill.clipboard.dangerouslyPasteHTML(0,d.html);
+ }
+}catch(e){}
+applySize();render();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+})();
+</script>
 </body>
-  </html>
+</html>
