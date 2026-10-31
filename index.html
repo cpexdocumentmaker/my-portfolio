@@ -67,7 +67,7 @@ table.l td,table.l th{padding:9px 6px;border-bottom:1px solid var(--line);text-a
 .it td{padding:2px}.it th{font-size:12px;color:var(--mut);text-align:left;padding:3px}
 .x{border:0;background:none;color:#d92d20;cursor:pointer;font-size:18px}
 #wrap{margin:0 auto;position:relative}
-.paper{width:794px;min-height:1123px;background:#fff;color:#111;padding:46px 52px;font-size:13.5px;line-height:1.6;box-shadow:0 2px 14px rgba(20,30,50,.18);position:absolute;left:0;top:0;transform-origin:top left}
+.paper{width:794px;min-height:1120px;background:#fff;color:#111;padding:46px 52px;font-size:13.5px;line-height:1.6;box-shadow:0 2px 14px rgba(20,30,50,.18);position:absolute;left:0;top:0;transform-origin:top left}
 .pdf .paper{position:static;box-shadow:none}
 .dh{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid var(--acc);padding-bottom:12px;margin-bottom:18px}
 .cn{font-size:20px;font-weight:700;color:var(--acc)}.ca{color:#555;font-size:12px}
@@ -85,7 +85,18 @@ table.l td,table.l th{padding:9px 6px;border-bottom:1px solid var(--line);text-a
 .cert h1{font-size:40px;color:var(--acc);letter-spacing:3px}.cert .nm{font-size:34px;font-weight:700;margin:18px 0;border-bottom:1px solid #999;display:inline-block;padding:0 30px}
 .sec{font-weight:700;color:var(--acc);border-bottom:1px solid #ddd;margin:16px 0 6px;text-transform:uppercase;font-size:13px}
 .sw{display:flex;gap:8px;flex-wrap:wrap}.sw button{width:30px;height:30px;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line);cursor:pointer}
-.fr{width:100%;height:100%;border:0;border-radius:12px;background:#fff}
+.fr{flex:1;width:100%;border:0;background:#fff;min-height:0}
+.fv{display:flex;flex-direction:column;height:100%}
+.fb{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--side);border-bottom:1px solid var(--line)}
+a.ni,a.tc,a.pf{text-decoration:none;color:inherit}
+.ni .ex{margin-left:auto;opacity:.5;width:15px;height:15px}
+.sf{border-top:1px solid var(--line);padding:12px 14px}
+.pf{display:flex;gap:10px;align-items:center;margin-bottom:10px}.pf b{display:block;font-size:14px}.pf small{color:var(--mut)}
+.srow{display:flex;gap:6px;flex-wrap:wrap}
+.so{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mut)}.so:hover{color:var(--acc);border-color:var(--acc)}
+.av{position:relative;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;overflow:hidden;flex-shrink:0;font-weight:700}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
 #scrim{display:none}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1f2430;color:#fff;padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
 #toast.show{opacity:1}
@@ -111,7 +122,7 @@ table.l td,table.l th{padding:9px 6px;border-bottom:1px solid var(--line);text-a
 </head>
 <body>
 <div class="app">
- <aside id="side"><div class="brand"><span class="logo" id="logo"></span><span id="bname"></span></div><nav id="nav"></nav></aside>
+ <aside id="side"><div class="brand"><span class="logo" id="logo"></span><span id="bname"></span></div><nav id="nav"></nav><div class="sf" id="sf"></div></aside>
  <div class="main">
   <header class="bar">
    <button class="ib" id="burger" aria-label="মেনু"></button>
@@ -136,13 +147,16 @@ var br=function(s){return esc(s).replace(/\n/g,'<br>')};
 var today=new Date().toISOString().slice(0,10);
 
 /* ---------- আইকন ---------- */
-var IC={home:'M3 11l9-8 9 8v10H4z',grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',receipt:'M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2zM9 8h6M9 12h6',quote:'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5',truck:'M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19h.01M17 19h.01',wallet:'M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2zM3 7l2-3h12M16 13h2',mail:'M3 6h18v12H3zM3 7l9 6 9-6',award:'M12 14a5 5 0 100-10 5 5 0 000 10zM8.5 13.5L7 21l5-3 5 3-1.5-7.5',user:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0',pen:'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',doc:'M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M9 13h6M9 17h6',build:'M4 21V5a1 1 0 011-1h8a1 1 0 011 1v16M14 9h5a1 1 0 011 1v11M3 21h18M8 8h2M8 12h2M8 16h2',image:'M4 5h16v14H4zM8 10h.01M4 17l5-5 4 4 3-3 4 4',set:'M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M10 10v4M16 16v4',menu:'M4 6h16M4 12h16M4 18h16',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',moon:'M20 14A8 8 0 1110 4a6.5 6.5 0 0010 10z',dl:'M12 4v11M7 11l5 5 5-5M5 20h14',trash:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',plus:'M12 5v14M5 12h14',save:'M5 3h12l3 3v15H5zM8 3v6h8M8 21v-7h8v7',print:'M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z',reset:'M4 12a8 8 0 108-8M4 4v5h5',open:'M5 12h14M13 6l6 6-6 6'};
+var IC={home:'M3 11l9-8 9 8v10H4z',grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',receipt:'M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2zM9 8h6M9 12h6',quote:'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5',truck:'M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19h.01M17 19h.01',wallet:'M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2zM3 7l2-3h12M16 13h2',mail:'M3 6h18v12H3zM3 7l9 6 9-6',award:'M12 14a5 5 0 100-10 5 5 0 000 10zM8.5 13.5L7 21l5-3 5 3-1.5-7.5',user:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0',pen:'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',doc:'M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM14 3v5h5M9 13h6M9 17h6',build:'M4 21V5a1 1 0 011-1h8a1 1 0 011 1v16M14 9h5a1 1 0 011 1v11M3 21h18M8 8h2M8 12h2M8 16h2',image:'M4 5h16v14H4zM8 10h.01M4 17l5-5 4 4 3-3 4 4',set:'M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M10 10v4M16 16v4',menu:'M4 6h16M4 12h16M4 18h16',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',moon:'M20 14A8 8 0 1110 4a6.5 6.5 0 0010 10z',dl:'M12 4v11M7 11l5 5 5-5M5 20h14',trash:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',plus:'M12 5v14M5 12h14',save:'M5 3h12l3 3v15H5zM8 3v6h8M8 21v-7h8v7',print:'M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z',reset:'M4 12a8 8 0 108-8M4 4v5h5',open:'M5 12h14M13 6l6 6-6 6',globe:'M12 21a9 9 0 100-18 9 9 0 000 18zM3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18',book:'M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 19a2 2 0 012-2h13',clock:'M12 7v5l3 2M12 21a9 9 0 100-18 9 9 0 000 18z',fb:'M14 8h3V4h-3a4 4 0 00-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z',ig:'M7 3h10a4 4 0 014 4v10a4 4 0 01-4 4H7a4 4 0 01-4-4V7a4 4 0 014-4zM12 16a4 4 0 100-8 4 4 0 000 8zM17.5 6.5h.01',yt:'M3 8a3 3 0 013-3h12a3 3 0 013 3v8a3 3 0 01-3 3H6a3 3 0 01-3-3zM10 9l5 3-5 3z',tt:'M14 3v11a4 4 0 11-4-4M14 3c0 3 2 5 5 5',xx:'M4 4l16 16M20 4L4 20',gh:'M9 19c-4 1-4-2-6-2m12 4v-3a3 3 0 00-1-2c3 0 6-1 6-6a5 5 0 00-1-3 5 5 0 000-3s-1 0-3 1a10 10 0 00-6 0C6 4 5 4 5 4a5 5 0 000 3 5 5 0 00-1 3c0 5 3 6 6 6a3 3 0 00-1 2v3',tg:'M21 4L3 11l6 2 2 6 3-4 5 4z'};
 var ico=function(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="'+(IC[n]||IC.doc)+'"/></svg>'};
 
 /* ---------- ডেটা ---------- */
-var DEF={name:'ডক স্টুডিও',co:'আপনার কোম্পানির নাম',addr:'',phone:'',email:'',cur:'RM',acc:'#0f6b5c',dark:0};
-var D={set:Object.assign({},DEF),docs:[],drafts:{}};
-try{var sv=JSON.parse(localStorage.getItem('dash_v1')||'null');if(sv){D=sv;D.set=Object.assign({},DEF,sv.set);D.docs=D.docs||[];D.drafts=D.drafts||{}}}catch(e){}
+var SITE='https://masumcpex.com';
+var DEF={name:'ডক স্টুডিও',owner:'মাসুম বিল্লাহ',photo:SITE+'/masum.png',co:'আপনার কোম্পানির নাম',addr:'',phone:'',email:'',cur:'RM',acc:'#0f6b5c',dark:0,soc:{facebook:'masumcpex',instagram:'masumcpex',youtube:'masumcpex',tiktok:'masumcpex',x:'masumcpex',github:'masumcpex',telegram:'masumcpex'}};
+var defSet=function(){return JSON.parse(JSON.stringify(DEF))};
+var SO=[['facebook','Facebook','https://facebook.com/','fb'],['instagram','Instagram','https://instagram.com/','ig'],['youtube','YouTube','https://youtube.com/@','yt'],['tiktok','TikTok','https://tiktok.com/@','tt'],['x','X (Twitter)','https://x.com/','xx'],['github','GitHub','https://github.com/','gh'],['telegram','Telegram','https://t.me/','tg']];
+var D={set:defSet(),docs:[],drafts:{}};
+try{var sv=JSON.parse(localStorage.getItem('dash_v1')||'null');if(sv){D=sv;D.set=Object.assign(defSet(),sv.set);D.set.soc=Object.assign(defSet().soc,(sv.set||{}).soc||{});D.docs=D.docs||[];D.drafts=D.drafts||{}}}catch(e){}
 function save(){try{localStorage.setItem('dash_v1',JSON.stringify(D))}catch(e){}}
 function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('show')},2600)}
 var money=function(n){return esc(D.set.cur)+' '+f2(n)};
@@ -194,7 +208,15 @@ var MODS=[{id:'home',n:'ড্যাশবোর্ড',ic:'grid',g:'মূল'}
  .concat(TOOLS.map(function(t){return{id:t.id,n:t.n,ic:t.ic,g:t.g,tool:t}}))
  .concat([{id:'editor',n:'ডকুমেন্ট এডিটর',ic:'doc',g:'এডিটর ও কনস্ট্রাকশন',ds:'নিজে লিখে PDF করুন',frame:'editor.html'},
   {id:'claim',n:'প্রগ্রেস ক্লেইম',ic:'build',g:'এডিটর ও কনস্ট্রাকশন',ds:'নির্মাণ কাজের ক্লেইম ও মেজারমেন্ট',frame:'claim.html'},
+  {id:'fin',n:'ফাইন্যান্স ট্র্যাকার',ic:'wallet',g:'আমার সিস্টেম',ds:'আয়-ব্যয় ও ফ্যামিলি সাপোর্টের হিসাব',frame:SITE+'/Finance.html'},
+  {id:'att',n:'অ্যাটেনডেন্স (WorkTrack)',ic:'clock',g:'আমার সিস্টেম',ds:'হাজিরা ও কাজের ট্র্যাকিং',frame:SITE+'/attendance.html'},
   {id:'img',n:'ছবি থেকে PDF',ic:'image',g:'ইউটিলিটি',ds:'একাধিক ছবি এক PDF-এ'},
+  {id:'x-site',n:'মূল ওয়েবসাইট',ic:'globe',g:'আমার ওয়েবসাইট',ds:'masumcpex.com',ext:SITE},
+  {id:'x-contact',n:'যোগাযোগ',ic:'mail',g:'আমার ওয়েবসাইট',ds:'মেসেজ বা ইমেইল পাঠান',ext:SITE+'/#contact'},
+  {id:'x-lib',n:'বইয়ের লাইব্রেরি',ic:'book',g:'আমার ওয়েবসাইট',ds:'ফ্রি ই-বুক পড়ুন ও ডাউনলোড করুন',ext:SITE+'/#library'},
+  {id:'x-jour',n:'জার্নাল',ic:'pen',g:'আমার ওয়েবসাইট',ds:'গল্প, অনুভূতি ও ভাবনা',ext:SITE+'/#journal'},
+  {id:'x-art',n:'ব্লগ ও প্রবন্ধ',ic:'doc',g:'আমার ওয়েবসাইট',ds:'লেখালেখি',ext:SITE+'/#articles'},
+  {id:'x-proj',n:'প্রজেক্টস',ic:'grid',g:'আমার ওয়েবসাইট',ds:'যা তৈরি করছি',ext:SITE+'/#projects'},
   {id:'settings',n:'সেটিং',ic:'set',g:'সিস্টেম'}]);
 var cur=null,route='home';
 
@@ -203,7 +225,7 @@ function buildNav(filter){
  MODS.forEach(function(m){
   if(q&&m.n.toLowerCase().indexOf(q)<0)return;
   if(m.g!==g){g=m.g;h+='<div class="gt">'+g+'</div>'}
-  h+='<button class="ni'+(m.id===route?' on':'')+'" data-go="'+m.id+'">'+ico(m.ic)+'<span>'+m.n+'</span></button>'});
+  h+=m.ext?'<a class="ni" href="'+m.ext+'" target="_blank" rel="noopener">'+ico(m.ic)+'<span>'+m.n+'</span>'+ico('open').replace('class="i"','class="i ex"')+'</a>':'<button class="ni'+(m.id===route?' on':'')+'" data-go="'+m.id+'">'+ico(m.ic)+'<span>'+m.n+'</span></button>'});
  $('nav').innerHTML=h||'<div class="gt">কিছু পাওয়া যায়নি</div>';
 }
 function applySet(){
@@ -211,14 +233,20 @@ function applySet(){
  r.style.setProperty('--acc',s.acc);document.documentElement.toggleAttribute('data-dark',!!s.dark);
  $('bname').textContent=s.name;$('logo').textContent=(s.name||'D').trim().charAt(0);
  document.title=s.name+' — ডকুমেন্ট ও PDF টুলস';
+ renderFoot();
 }
+function avatar(z){var s=D.set;return '<span class="av" style="width:'+z+'px;height:'+z+'px;font-size:'+Math.round(z/2.3)+'px">'+esc((s.owner||'M').trim().charAt(0))+'<img src="'+esc(s.photo)+'" alt="'+esc(s.owner)+'" onerror="this.remove()"></span>'}
+function renderFoot(){var s=D.set,f=$('sf');if(!f)return;
+ var so=SO.filter(function(o){return s.soc[o[0]]}).map(function(o){return '<a class="so" href="'+o[2]+encodeURIComponent(s.soc[o[0]])+'" target="_blank" rel="noopener" aria-label="'+o[1]+'" title="'+o[1]+'">'+ico(o[3])+'</a>'}).join('');
+ f.innerHTML='<a class="pf" href="'+SITE+'" target="_blank" rel="noopener">'+avatar(38)+'<span><b>'+esc(s.owner)+'</b><small>masumcpex.com</small></span></a><div class="srow">'+so+'<a class="so" href="mailto:admin@masumcpex.com" aria-label="ইমেইল" title="admin@masumcpex.com">'+ico('mail')+'</a></div>'}
 
 /* ---------- ভিউ: ড্যাশবোর্ড ---------- */
 function vHome(){
  var td=D.docs.filter(function(x){return x.ts.slice(0,10)===today}).length;
  var cards=TOOLS.concat(MODS.filter(function(m){return m.frame||m.id==='img'})).map(function(m){return '<button class="tc" data-go="'+m.id+'"><div class="ci">'+ico(m.ic)+'</div><b>'+(m.n)+'</b><small>'+(m.ds||'')+'</small></button>'}).join('');
+ var ext=MODS.filter(function(m){return m.ext}).map(function(m){return '<a class="tc" href="'+m.ext+'" target="_blank" rel="noopener"><div class="ci">'+ico(m.ic)+'</div><b>'+m.n+'</b><small>'+m.ds+'</small></a>'}).join('');
  var rows=D.docs.slice().reverse().slice(0,8).map(function(x){var t=TOOLS.filter(function(z){return z.id===x.t})[0];return '<tr><td>'+esc(t?t.n:x.t)+'</td><td>'+esc(x.ti)+'</td><td>'+x.ts.slice(0,10)+'</td><td style="text-align:right;white-space:nowrap"><button class="btn" data-open="'+x.id+'">খুলুন</button> <button class="x" data-deld="'+x.id+'" aria-label="মুছুন">×</button></td></tr>'}).join('');
- return '<h1>স্বাগতম, '+esc(D.set.name)+'</h1><p class="sub">আপনার সব ডকুমেন্ট টুল এক জায়গায়।</p><div class="cards"><div class="st"><b>'+D.docs.length+'</b><span>সংরক্ষিত ডকুমেন্ট</span></div><div class="st"><b>'+td+'</b><span>আজকের ডকুমেন্ট</span></div><div class="st"><b>'+TOOLS.length+'</b><span>ডকুমেন্ট টুল</span></div><div class="st"><b>'+Object.keys(D.drafts).length+'</b><span>চলমান খসড়া</span></div></div><h2>টুলস</h2><div class="grid">'+cards+'</div><div class="panel"><h2>সাম্প্রতিক ডকুমেন্ট</h2>'+(rows?'<div class="sc"><table class="l"><tr><th>টুল</th><th>শিরোনাম</th><th>তারিখ</th><th></th></tr>'+rows+'</table></div>':'<p class="sub" style="margin:0">এখনো কিছু সংরক্ষণ করা হয়নি। যেকোনো টুল খুলে "সংরক্ষণ" চাপুন।</p>')+'</div>';
+ return '<div class="hero">'+avatar(60)+'<div style="flex:1;min-width:200px"><h1 style="margin:0">স্বাগতম, '+esc(D.set.owner)+'</h1><p class="sub" style="margin:2px 0 0">আপনার সব ডকুমেন্ট টুল ও সিস্টেম এক জায়গায়।</p></div><a class="btn" href="'+SITE+'" target="_blank" rel="noopener">'+ico('globe')+' মূল সাইট</a><a class="btn p" href="'+SITE+'/#contact" target="_blank" rel="noopener">'+ico('mail')+' যোগাযোগ</a></div><div class="cards"><div class="st"><b>'+D.docs.length+'</b><span>সংরক্ষিত ডকুমেন্ট</span></div><div class="st"><b>'+td+'</b><span>আজকের ডকুমেন্ট</span></div><div class="st"><b>'+TOOLS.length+'</b><span>ডকুমেন্ট টুল</span></div><div class="st"><b>'+Object.keys(D.drafts).length+'</b><span>চলমান খসড়া</span></div></div><h2>টুলস ও সিস্টেম</h2><div class="grid">'+cards+'</div><h2>আমার ওয়েবসাইট</h2><div class="grid">'+ext+'</div><div class="panel"><h2>সাম্প্রতিক ডকুমেন্ট</h2>'+(rows?'<div class="sc"><table class="l"><tr><th>টুল</th><th>শিরোনাম</th><th>তারিখ</th><th></th></tr>'+rows+'</table></div>':'<p class="sub" style="margin:0">এখনো কিছু সংরক্ষণ করা হয়নি। যেকোনো টুল খুলে "সংরক্ষণ" চাপুন।</p>')+'</div>';
 }
 
 /* ---------- ভিউ: টুল ---------- */
@@ -252,9 +280,9 @@ function docTitle(){var f=cur.d.f;return (f.no||f.name||f.emp||f.title||f.sub||f
 function pdfOf(html,w,name,orient,btn){
  if(typeof html2pdf==='undefined'){toast('PDF টুল লোড হয়নি। ইন্টারনেট দেখে রিলোড করুন।');return}
  var lab=btn&&btn.innerHTML;if(btn){btn.disabled=true}
- var h=document.createElement('div');h.className='pdf';h.style.cssText='position:fixed;left:-99999px;top:0;width:'+w+'px';h.innerHTML=html;document.body.appendChild(h);
+ var h=document.createElement('div');h.style.cssText='position:fixed;left:-99999px;top:0';var inn=document.createElement('div');inn.className='pdf';inn.style.cssText='width:'+w+'px;background:#fff';inn.innerHTML=html;h.appendChild(inn);document.body.appendChild(h);
  html2pdf().set({margin:0,filename:name,image:{type:'jpeg',quality:0.97},html2canvas:{scale:2,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:orient||'portrait'},pagebreak:{mode:['css'],avoid:'tr'}})
-  .from(h).save().then(function(){toast('PDF ডাউনলোড হয়েছে।')}).catch(function(){toast('PDF তৈরি করা যায়নি।')})
+  .from(inn).save().then(function(){toast('PDF ডাউনলোড হয়েছে।')}).catch(function(){toast('PDF তৈরি করা যায়নি।')})
   .then(function(){document.body.removeChild(h);if(btn){btn.disabled=false}});
 }
 function safe(s){return (String(s).replace(/[\\/:*?"<>|]/g,'').trim()||'document')}
@@ -264,27 +292,33 @@ var IMGS=[];
 function vImg(){
  return '<h1>ছবি থেকে PDF</h1><p class="sub">একাধিক ছবি বেছে এক PDF বানান। ছবির ক্রম বদলাতে মুছে আবার যোগ করুন।</p><div class="panel"><div class="f"><label>ছবি বাছাই করুন</label><input type="file" id="imf" accept="image/*" multiple></div><div class="f" style="max-width:240px"><label>পেজের দিক</label><select id="imo"><option value="portrait">খাড়া (Portrait)</option><option value="landscape">আড়াআড়ি (Landscape)</option></select></div><div id="iml" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0"></div><button class="btn p" data-act="imgpdf">'+ico('dl')+' PDF বানান</button></div>';
 }
+function addImgs(fs,i){if(i>=fs.length){imList();return}
+ var r=new FileReader();r.onload=function(){var im=new Image();
+  im.onload=function(){var k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);IMGS.push(c.toDataURL('image/jpeg',0.88));addImgs(fs,i+1)};
+  im.onerror=function(){toast('একটি ছবি পড়া যায়নি।');addImgs(fs,i+1)};im.src=r.result};
+ r.readAsDataURL(fs[i])}
 function imList(){var l=$('iml');if(!l)return;l.innerHTML=IMGS.map(function(s,i){return '<div style="position:relative"><img src="'+s+'" alt="" style="height:90px;border-radius:8px;border:1px solid var(--line)"><button class="x" data-delimg="'+i+'" style="position:absolute;top:-8px;right:-6px;background:var(--card);border-radius:50%" aria-label="মুছুন">×</button></div>'}).join('')}
 
 /* ---------- ভিউ: সেটিং ---------- */
 function vSet(){
  var s=D.set,f=function(k,l,t){return '<div class="f"><label>'+l+'</label><input type="'+(t||'text')+'" data-s="'+k+'" value="'+esc(s[k])+'"></div>'};
+ var soP='<div class="panel"><h2>সোশ্যাল মিডিয়া (ইউজারনেম)</h2>'+SO.map(function(o){return '<div class="f"><label>'+o[1]+'</label><input type="text" data-so="'+o[0]+'" value="'+esc(s.soc[o[0]])+'" placeholder="ইউজারনেম, ফাঁকা রাখলে লুকানো থাকবে"></div>'}).join('')+'</div>';
  var sw=['#0f6b5c','#2563eb','#7c3aed','#db2777','#ea580c','#0f766e','#334155'].map(function(c){return '<button style="background:'+c+'" data-acc="'+c+'" aria-label="'+c+'"></button>'}).join('');
- return '<h1>সেটিং</h1><p class="sub">এখানের তথ্য সব ডকুমেন্টের হেডারে বসবে।</p><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="panel"><h2>ব্র্যান্ড ও কোম্পানি</h2>'+f('name','সাইটের নাম')+f('co','কোম্পানির নাম')+'<div class="f"><label>ঠিকানা</label><textarea data-s="addr">'+esc(s.addr)+'</textarea></div>'+f('phone','ফোন')+f('email','ইমেইল','email')+f('cur','মুদ্রা চিহ্ন (RM, ৳, $)')+'</div><div class="panel"><h2>চেহারা</h2><div class="f"><label>মূল রঙ</label><div class="sw">'+sw+'<input type="color" data-s="acc" value="'+esc(s.acc)+'" aria-label="নিজের রঙ" style="width:36px;height:30px;padding:0;border:0"></div></div><label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="dk"'+(s.dark?' checked':'')+'> ডার্ক মোড</label><h2 style="margin-top:24px">ডেটা ব্যাকআপ</h2><p class="sub" style="margin-bottom:10px">সব ডেটা শুধু এই ব্রাউজারে থাকে। নিয়মিত ব্যাকআপ রাখুন।</p><div class="tb"><button class="btn" data-act="exp">'+ico('dl')+' ব্যাকআপ নিন</button><label class="btn" style="cursor:pointer">'+ico('open')+' রিস্টোর<input type="file" id="imp" accept=".json" hidden></label><button class="btn" data-act="wipe" style="color:#d92d20">'+ico('trash')+' সব মুছুন</button></div></div></div>';
+ return '<h1>সেটিং</h1><p class="sub">এখানের তথ্য সব ডকুমেন্টের হেডারে বসবে।</p><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="panel"><h2>ব্র্যান্ড ও কোম্পানি</h2>'+f('name','সাইটের নাম')+f('owner','আপনার নাম')+f('photo','ছবির লিংক (URL)')+f('co','কোম্পানির নাম')+'<div class="f"><label>ঠিকানা</label><textarea data-s="addr">'+esc(s.addr)+'</textarea></div>'+f('phone','ফোন')+f('email','ইমেইল','email')+f('cur','মুদ্রা চিহ্ন (RM, ৳, $)')+'</div><div class="panel"><h2>চেহারা</h2><div class="f"><label>মূল রঙ</label><div class="sw">'+sw+'<input type="color" data-s="acc" value="'+esc(s.acc)+'" aria-label="নিজের রঙ" style="width:36px;height:30px;padding:0;border:0"></div></div><label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="dk"'+(s.dark?' checked':'')+'> ডার্ক মোড</label><h2 style="margin-top:24px">ডেটা ব্যাকআপ</h2><p class="sub" style="margin-bottom:10px">সব ডেটা শুধু এই ব্রাউজারে থাকে। নিয়মিত ব্যাকআপ রাখুন।</p><div class="tb"><button class="btn" data-act="exp">'+ico('dl')+' ব্যাকআপ নিন</button><label class="btn" style="cursor:pointer">'+ico('open')+' রিস্টোর<input type="file" id="imp" accept=".json" hidden></label><button class="btn" data-act="wipe" style="color:#d92d20">'+ico('trash')+' সব মুছুন</button></div></div>'+soP+'</div>';
 }
 
 /* ---------- রাউটার ---------- */
-function go(id){
+function go(id,push){
  var m=MODS.filter(function(x){return x.id===id})[0]||MODS[0];route=m.id;cur=null;
  var v=$('view');
  if(m.tool)v.innerHTML=vTool(m.tool);
- else if(m.frame)v.innerHTML='<iframe class="fr" src="'+m.frame+'" title="'+m.n+'"></iframe>';
+ else if(m.frame)v.innerHTML='<div class="fv"><div class="fb"><b>'+m.n+'</b><span style="flex:1"></span><a class="btn" href="'+m.frame+'" target="_blank" rel="noopener">নতুন ট্যাবে খুলুন '+ico('open')+'</a></div><iframe class="fr" src="'+m.frame+'" title="'+m.n+'"></iframe></div>';
  else if(m.id==='img')v.innerHTML=vImg();
  else if(m.id==='settings')v.innerHTML=vSet();
  else v.innerHTML=vHome();
  if(m.tool)draw();
  v.style.padding=m.frame?'0':'';
- if(location.hash!=='#/'+m.id)history.replaceState(null,'','#/'+m.id);
+ if(push!==false&&location.hash!=='#/'+m.id)history.pushState(null,'','#/'+m.id);
  buildNav($('q').value);$('side').classList.remove('open');$('scrim').classList.remove('on');v.scrollTop=0;
 }
 
@@ -309,21 +343,22 @@ document.addEventListener('click',function(e){
   var o=$('imo').value,w=o==='landscape'?1123:794,hh=o==='landscape'?794:1123;
   pdfOf(IMGS.map(function(s,i){return '<div style="width:'+w+'px;height:'+(hh-2)+'px;display:flex;align-items:center;justify-content:center;background:#fff;'+(i<IMGS.length-1?'page-break-after:always':'')+'"><img src="'+s+'" style="max-width:96%;max-height:96%;object-fit:contain"></div>'}).join(''),w,'images.pdf',o,b)}
  else if(a==='exp'){var bl=new Blob([JSON.stringify(D)],{type:'application/json'}),u=document.createElement('a');u.href=URL.createObjectURL(bl);u.download='doc-studio-backup.json';u.click();setTimeout(function(){URL.revokeObjectURL(u.href)},1000)}
- else if(a==='wipe'){if(confirm('সব সংরক্ষিত ডকুমেন্ট, খসড়া ও সেটিং মুছে যাবে। নিশ্চিত?')){D={set:Object.assign({},DEF),docs:[],drafts:{}};save();applySet();go('home')}}
+ else if(a==='wipe'){if(confirm('সব সংরক্ষিত ডকুমেন্ট, খসড়া ও সেটিং মুছে যাবে। নিশ্চিত?')){D={set:defSet(),docs:[],drafts:{}};save();applySet();go('home')}}
 });
 document.addEventListener('input',function(e){
  var t=e.target,d=t.dataset;
  if(d.k!==undefined&&cur){cur.d.f[d.k]=t.value}
  else if(d.i!==undefined&&cur){cur.d.items[+d.i][d.c]=t.value}
- else if(d.s!==undefined){D.set[d.s]=t.value;if(d.s==='acc'||d.s==='name')applySet()}
+ else if(d.s!==undefined){D.set[d.s]=t.value;if(d.s==='acc'||d.s==='name'||d.s==='photo'||d.s==='owner')applySet()}
+ else if(d.so!==undefined){D.set.soc[d.so]=t.value.trim().replace(/^@/,'');renderFoot()}
  else return;
  if(cur){D.drafts[cur.t.id]=cur.d;draw()}save();
 });
 document.addEventListener('change',function(e){
  var t=e.target;
  if(t.id==='dk'){D.set.dark=t.checked?1:0;save();applySet()}
- else if(t.id==='imf'){Array.prototype.forEach.call(t.files,function(f){var r=new FileReader();r.onload=function(){IMGS.push(r.result);imList()};r.readAsDataURL(f)});t.value=''}
- else if(t.id==='imp'&&t.files[0]){var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result);if(!j.set)throw 0;D=j;D.docs=D.docs||[];D.drafts=D.drafts||{};D.set=Object.assign({},DEF,D.set);save();applySet();go('home');toast('রিস্টোর হয়েছে।')}catch(x){toast('ফাইলটি সঠিক ব্যাকআপ নয়।')}};r.readAsText(t.files[0])}
+ else if(t.id==='imf'){addImgs(Array.prototype.slice.call(t.files),0);t.value=''}
+ else if(t.id==='imp'&&t.files[0]){var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result);if(!j.set)throw 0;D=j;D.docs=D.docs||[];D.drafts=D.drafts||{};D.set=Object.assign(defSet(),D.set);D.set.soc=Object.assign(defSet().soc,D.set.soc||{});save();applySet();go('home');toast('রিস্টোর হয়েছে।')}catch(x){toast('ফাইলটি সঠিক ব্যাকআপ নয়।')}};r.readAsText(t.files[0])}
 });
 $('q').addEventListener('input',function(){buildNav(this.value)});
 $('q').addEventListener('keydown',function(e){if(e.key==='Enter'){var m=MODS.filter(function(x){return x.n.toLowerCase().indexOf($('q').value.toLowerCase())>=0})[0];if(m){$('q').value='';go(m.id)}}});
@@ -331,10 +366,11 @@ $('burger').addEventListener('click',function(){$('side').classList.add('open');
 $('scrim').addEventListener('click',function(){$('side').classList.remove('open');this.classList.remove('on')});
 $('theme').addEventListener('click',function(){D.set.dark=D.set.dark?0:1;save();applySet()});
 $('gear').addEventListener('click',function(){go('settings')});
-window.addEventListener('hashchange',function(){var id=location.hash.replace('#/','');if(id!==route)go(id)});
+window.addEventListener('popstate',function(){go(location.hash.replace('#/','')||'home',false)});
 window.addEventListener('resize',fit);
 $('burger').innerHTML=ico('menu');$('si').innerHTML=ico('search');$('theme').innerHTML=ico('moon');$('gear').innerHTML=ico('set');
-applySet();go(location.hash.replace('#/','')||'home');
+var r0=location.hash.replace('#/','');history.replaceState(null,'','#/home');
+applySet();go(r0||'home');
 })();
 </script>
 </body>
